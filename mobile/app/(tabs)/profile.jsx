@@ -5,7 +5,7 @@ import {router} from "expo-router";
 import {useEffect, useState} from "react";
 import WorkoutBox from "../../components/WorkoutBox";
 import getWorkouts from "../../api/workouts";
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function Profile() {
     const [workoutsList, setWorkoutsList] = useState([]);
@@ -22,7 +22,7 @@ export default function Profile() {
         setWorkoutsList(workouts); // Update state
     };
 
-    useEffect( () => {
+    useEffect(() => {
         fetchWorkouts();
     }, [isFocused]); // fetch on every navigation
 

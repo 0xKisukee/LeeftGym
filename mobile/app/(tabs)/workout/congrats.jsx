@@ -21,7 +21,17 @@ export default function Create() {
     return (
         <SafeAreaView>
             <Text>Workout - Congrats</Text>
+            <Text>Felicitations, votre entraînement a été enregistré</Text>
 
+            <AppBtn
+                title="Retourner au profil"
+                handlePress={() => {
+                    router.back();
+                    router.back();
+                    router.back();
+                    router.replace("/profile");
+                }}
+            />
         </SafeAreaView>
     );
 }

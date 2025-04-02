@@ -2,11 +2,14 @@ import {Text, View, StyleSheet, SafeAreaView, TextInput} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
 import {useEffect, useState} from "react";
-import {createWorkout} from "../../../api/workouts";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import pushWorkout from "../../../api/pushWorkout";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function Create() {
+    const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
+
     const emptyWorkout = {
         name: "",
         is_private: false, // set to default user choice
@@ -18,16 +21,12 @@ export default function Create() {
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
 
-    const [message, setMessage] = useState("");
-    const [messageColor, setMessageColor] = useState("black");
-
     // Retrieve workout data from AsyncStorage when the app starts
     useEffect(() => {
         const loadWorkoutData = async () => {
             try {
                 const savedData = await AsyncStorage.getItem('workoutData');
                 if (savedData !== null) {
-                    console.log(savedData);
                     setCreatedWorkout(JSON.parse(savedData));
                 }
             } catch (e) {
@@ -36,27 +35,22 @@ export default function Create() {
         };
 
         loadWorkoutData();
-    }, []);
+    }, [isFocused]);
 
     const saveWorkout = async (createdWorkout) => {
+        // if check needed use this
+        // const pushResult = await pushWorkout(createdWorkout);
+        await pushWorkout(createdWorkout);
 
-        const result = await createWorkout(createdWorkout);
-        if (!result.id) {
-            // Log error message
-            setMessage(result.message);
-            setMessageColor("red");
-        } else {
-            // Delete workout from local storage
-            await AsyncStorage.removeItem('workoutData');
+        // Delete workout from local storage
+        await AsyncStorage.removeItem('workoutData');
 
-            // Clear fields
-            setCreatedWorkout(emptyWorkout);
+        // Clear fields
+        setCreatedWorkout(emptyWorkout);
 
-            // Redirect
-            router.replace("/profile");
-        }
+        // Redirect
+        router.push("/workout/congrats");
     }
-
 
 
     return (
@@ -73,8 +67,6 @@ export default function Create() {
                     saveWorkout(createdWorkout);
                 }}
             />
-
-            <Text style={{color: messageColor}}>{message}</Text>
 
         </SafeAreaView>
     );

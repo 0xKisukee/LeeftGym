@@ -24,7 +24,6 @@ async function isAuth() {
     }
 
     const userInfos = await me(token);
-    console.log(userInfos);
 
     if (!userInfos.userId) {
         console.log("auth expired");

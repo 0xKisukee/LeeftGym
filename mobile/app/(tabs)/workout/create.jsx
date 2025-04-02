@@ -2,13 +2,16 @@ import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList} from "react-n
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
 import {useEffect, useState} from "react";
-import {createWorkout} from "../../../api/workouts";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import WorkoutBox from "../../../components/WorkoutBox";
 import WorkoutExerciseBox from "../../../components/WorkoutExerciseBox";
+import {useIsFocused} from "@react-navigation/native";
+import Chronometer from "../../../components/Chrono";
 
 export default function Create() {
+    const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
+
     const emptyWorkout = {
         name: "",
         is_private: false, // set to default user choice
@@ -27,6 +30,8 @@ export default function Create() {
                 const savedData = await AsyncStorage.getItem('workoutData');
                 if (savedData !== null) {
                     setCreatedWorkout(JSON.parse(savedData));
+                } else {
+                    setCreatedWorkout(emptyWorkout);
                 }
             } catch (e) {
                 console.error("Failed to load workout data", e);
@@ -34,7 +39,7 @@ export default function Create() {
         };
 
         loadWorkoutData();
-    }, []);
+    }, [isFocused]);
 
     // Save workout data to AsyncStorage whenever it changes
     useEffect(() => {
@@ -49,9 +54,6 @@ export default function Create() {
         saveWorkoutData();
 
     }, [createdWorkout]);
-
-    const [message, setMessage] = useState("");
-    const [messageColor, setMessageColor] = useState("black");
 
     const confirmWorkout = async (createdWorkout) => {
         // Delete workout from local storage
@@ -84,6 +86,9 @@ export default function Create() {
     return (
         <SafeAreaView>
             <Text>Workout - Create</Text>
+            <Chronometer
+                startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime()/1000)}
+            />
             <FlatList
                 data={createdWorkout.WorkoutExercises}
                 renderItem={({item}) => <WorkoutExerciseBox workoutExercise={item}/>}

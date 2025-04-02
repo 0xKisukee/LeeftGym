@@ -4,6 +4,8 @@ const API_URL = 'https://gym.leeft.fun/api';
 
 export default async function getExoNameById(exerciseId) {
     try {
+        const jwtToken = await getValueFor("userJWT");
+
         const response = await fetch(
             API_URL + '/exercises/' + exerciseId,
             {
@@ -11,6 +13,7 @@ export default async function getExoNameById(exerciseId) {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
                 },
             }
         );
