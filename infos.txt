@@ -1,0 +1,172 @@
+- Data is pushed into the database when the user clicks "Save" after finishing his workout
+
+- When the user creates a workout, a json file is stored in local storage with infos like start_time.
+This json file contains the data that will be pushed in the database when the workout will be saved
+
+1) User click "Start workout" on 2025-03-29 at 20:58:38
+A json file is created in local storage, like this (XXX are undefined values and DEFAULT are user account defined values):
+
+{
+    "name": XXX,
+    "is_private": DEFAULT,
+    "started_at": "2025-03-29T20:58:38.731Z",
+    "completed_at": XXX,
+    "is_routine": false,
+    "WorkoutExercises": []
+}
+
+2) User clicks "Add exercise" during the workout, selects an exercise in the global list (id 145) and clicks "Add"
+A new line appears with a new empty workout exercise (0 sets)
+The local json file is edited with the new workout exercise:
+
+{
+    "name": XXX,
+    "is_private": DEFAULT,
+    "started_at": "2025-03-29T20:58:38.731Z",
+    "completed_at": XXX,
+    "is_routine": false,
+    "WorkoutExercises": [
+        {
+            "order": 1,
+            "rest_time": DEFAULT,
+            "exercise_id": 145,
+            "Sets": []
+        }
+    ]
+}
+
+3) User clicks "Add set" in the previous workout exercise
+A new line appears with an empty set
+The local json file is edited with the new set:
+
+{
+    "name": XXX,
+    "is_private": DEFAULT,
+    "started_at": "2025-03-29T20:58:38.731Z",
+    "completed_at": XXX,
+    "is_routine": false,
+    "WorkoutExercises": [
+        {
+            "order": 1,
+            "rest_time": DEFAULT,
+            "exercise_id": 145,
+            "Sets": [
+                {
+                    "order": 1,
+                    "weight": XXX,
+                    "reps": XXX,
+                    "completed": false,
+                    "workout_exercise_id": 14
+                }
+            ]
+        }
+    ]
+}
+
+4) User completes the set's expected information (12x40kg)
+The local json file is edited with the new information:
+
+{
+    "name": XXX,
+    "is_private": DEFAULT,
+    "started_at": "2025-03-29T20:58:38.731Z",
+    "completed_at": XXX,
+    "is_routine": false,
+    "WorkoutExercises": [
+        {
+            "order": 1,
+            "rest_time": DEFAULT,
+            "exercise_id": 145,
+            "Sets": [
+                {
+                    "order": 1,
+                    "weight": 40,
+                    "reps": 12,
+                    "completed": false,
+                    "workout_exercise_id": 14
+                }
+            ]
+        }
+    ]
+}
+
+5) User does the set IRL and at the end he clicks the "completed" logo button on the set
+The local json file is edited with the set to "completed":
+
+{
+    "name": XXX,
+    "is_private": DEFAULT,
+    "started_at": "2025-03-29T20:58:38.731Z",
+    "completed_at": XXX,
+    "is_routine": false,
+    "WorkoutExercises": [
+        {
+            "order": 1,
+            "rest_time": DEFAULT,
+            "exercise_id": 145,
+            "Sets": [
+                {
+                    "order": 1,
+                    "weight": 40,
+                    "reps": 12,
+                    "completed": true,
+                    "workout_exercise_id": 14
+                }
+            ]
+        }
+    ]
+}
+
+6) User decides to end the workout, he clicks on "End workout" at 21:05:20
+A new window appears and the user is asked for a name for the workout, he writes "Push session"
+The local json file is completed with the workout name and completed_at value:
+
+{
+    "name": "Push session",
+    "is_private": DEFAULT,
+    "started_at": "2025-03-29T20:58:38.731Z",
+    "completed_at": "2025-03-29T21:05:20.231Z",
+    "is_routine": false,
+    "WorkoutExercises": [
+        {
+            "order": 1,
+            "rest_time": DEFAULT,
+            "exercise_id": 145,
+            "Sets": [
+                {
+                    "order": 1,
+                    "weight": 40,
+                    "reps": 12,
+                    "completed": true,
+                    "workout_exercise_id": 14
+                }
+            ]
+        }
+    ]
+}
+
+Then this json file is interpreted by the app and the following calls are made to the database:
+
+- POST /api/workouts
+{
+    "name": "Push session",
+    "is_private": DEFAULT,
+    "started_at": "2023-11-14T22:13:20",
+    "completed_at": "2023-11-14T22:13:20",
+    "is_routine": false,
+}
+
+- POST /api/workouts/{this_workout_id}/exercises
+{
+    "exercise_id": 145,
+    "order": 1,
+    "rest_time": DEFAULT
+}
+
+- POST /api/exercises/{this_workout_exercise_id}/sets
+{
+    "order": 1,
+    "weight": 40,
+    "reps": 12,
+    "completed": true
+}

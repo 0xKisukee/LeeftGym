@@ -1,0 +1,73 @@
+const express = require('express');
+const router = express.Router();
+const auth = require("./middlewares/authentication")
+const authController = require('./controllers/auth.controller');
+const exerciseController = require('./controllers/exercise.controller');
+const workoutController = require('./controllers/workout.controller');
+const workoutExerciseController = require('./controllers/workoutExercise.controller');
+const setController = require('./controllers/set.controller');
+
+// Public routes
+
+router.post(
+    '/register',
+    authController.register,
+);
+
+router.post(
+    '/login',
+    authController.login,
+);
+
+// Auth routes
+
+router.get(
+    '/me',
+    auth.authenticateJwt,
+    authController.me,
+);
+
+router.get(
+    '/workouts',
+    auth.authenticateJwt,
+    workoutController.index,
+);
+router.get(
+    '/workouts/:id',
+    auth.authenticateJwt,
+    workoutController.show,
+);
+router.post(
+    '/workouts',
+    auth.authenticateJwt,
+    workoutController.store,
+);
+
+router.post(
+    '/workouts/:id/exercises',
+    auth.authenticateJwt,
+    workoutExerciseController.store,
+);
+
+router.get(
+    '/exercises/:id',
+    auth.authenticateJwt,
+    exerciseController.show,
+);
+
+router.post(
+    '/exercises/:id/sets',
+    auth.authenticateJwt,
+    setController.store,
+);
+
+// Admin routes
+
+// Setup admin auth later, now it's just a simple auth
+router.post(
+    '/exercises',
+    auth.authenticateJwt,
+    exerciseController.store,
+);
+
+module.exports = router;

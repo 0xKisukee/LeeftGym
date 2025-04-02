@@ -1,0 +1,27 @@
+const API_URL = 'https://gym.leeft.fun/api';
+
+export default async function register(email, password) {
+    try {
+        console.log(API_URL + '/register');
+        const response = await fetch(
+            API_URL + '/register',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            }
+        );
+
+        const json = await response.json();
+        return json;
+
+    } catch (error) {
+        alert(error);
+    }
+}
