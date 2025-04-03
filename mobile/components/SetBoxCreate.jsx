@@ -1,7 +1,8 @@
 import "../global.css";
+import {Container} from "./Container";
 import {Text, TextInput, View} from "react-native";
 
-export default function SetBox({set}) {
+export default function SetBoxCreate({set}) {
     return (
         <View
             style={{flexDirection: "row", justifyContent: "space-around"}}

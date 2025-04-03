@@ -1,13 +1,13 @@
-import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList} from "react-native";
+import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList, ScrollView} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import WorkoutBox from "../../../components/WorkoutBox";
-import WorkoutExerciseBox from "../../../components/WorkoutExerciseBox";
 import {useIsFocused} from "@react-navigation/native";
 import Chronometer from "../../../components/Chrono";
+import ExerciseBoxCreate from "../../../components/ExerciseBoxCreate";
+import SetBoxCreate from "../../../components/SetBoxCreate";
 
 export default function Create() {
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
@@ -55,21 +55,32 @@ export default function Create() {
 
     }, [createdWorkout]);
 
-    const confirmWorkout = async (createdWorkout) => {
-        // Delete workout from local storage
+    const confirmWorkout = async () => {
+        // Save workout to local storage
         await AsyncStorage.setItem('workoutData', JSON.stringify(createdWorkout));
 
         // Redirect
         router.push("/workout/confirm");
     }
 
+    const cancelWorkout = async () => {
+        // Delete workout from local storage
+        await AsyncStorage.removeItem('workoutData');
+
+        // Redirect
+        router.back();
+    }
+
     // Add exercise to state
-    const addExercise = (exerciseId) => {
+    const addExercise = (exoId) => {
+        // Calculate order
+        const defaultOrder = createdWorkout.WorkoutExercises.length + 1;
+
         // Create the new exercise object
         const newExercise = {
-            order: 1,
+            order: defaultOrder,
             rest_time: 180,
-            exercise_id: exerciseId,
+            exercise_id: exoId,
             Sets: []
         };
 
@@ -83,27 +94,75 @@ export default function Create() {
         setCreatedWorkout(updatedWorkout);
     };
 
-    return (
-        <SafeAreaView>
-            <Text>Workout - Create</Text>
-            <Chronometer
-                startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime()/1000)}
-            />
-            <FlatList
-                data={createdWorkout.WorkoutExercises}
-                renderItem={({item}) => <WorkoutExerciseBox workoutExercise={item}/>}
-            />
+    // Add set to state
+    const addSet = (exerciseOrder, reps) => {
+        // Copier l'objet actuel
+        const updatedWorkout = {...createdWorkout};
+
+        // Trouver l'exercice correspondant
+        const updatedExercises = updatedWorkout.WorkoutExercises.map((exercise) => {
+            if (exercise.order === exerciseOrder) {
+                // Créer le nouvel ensemble (set)
+                const newSet = {
+                    order: exercise.Sets.length + 1,
+                    weight: 60, // Valeur par défaut
+                    reps: reps,
+                    completed: true,
+                };
+
+                // Ajouter le set à l'exercice
+                return {
+                    ...exercise,
+                    Sets: [...exercise.Sets, newSet],
+                };
+            }
+            return exercise;
+        });
+
+        // Mettre à jour l'état
+        updatedWorkout.WorkoutExercises = updatedExercises;
+        setCreatedWorkout(updatedWorkout);
+    };
+
+    const renderExercise = ({ item }) => (
+        <ExerciseBoxCreate
+            exercise={item}
+            handlePress={() => addSet(item.order, 12)}
+        />
+    );
+
+    // Boutons à afficher en bas de la liste
+    const renderFooter = () => (
+        <View>
             <AppBtn
                 title="Ajouter un exercice"
-                handlePress={() => {
-                    addExercise(1); // for now the added exercise will be hard coded (2)
-                }}
+                handlePress={() => addExercise(1)} // Example exercise ID
             />
             <AppBtn
                 title="Terminer la séance"
-                handlePress={() => {
-                    confirmWorkout(createdWorkout);
-                }}
+                handlePress={confirmWorkout}
+            />
+            <AppBtn
+                title="Annuler la séance"
+                handlePress={cancelWorkout}
+            />
+        </View>
+    );
+
+    return (
+        <SafeAreaView>
+            <FlatList
+                data={createdWorkout.WorkoutExercises}
+                renderItem={renderExercise}
+                ListHeaderComponent={
+                    <>
+                        <Text>Workout - Create</Text>
+                        <Chronometer
+                            startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
+                        />
+                    </>
+                }
+                ListFooterComponent={renderFooter}
             />
         </SafeAreaView>
     );

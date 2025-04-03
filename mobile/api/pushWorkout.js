@@ -32,7 +32,6 @@ export default async function pushWorkout(workout) {
 
         // Push Exercises
         const workoutExos = workout.WorkoutExercises;
-        console.log("number of exos in workout:", workoutExos.length);
 
         for (let i = 0; i < workoutExos.length; i++) {
             const workoutExo = workoutExos[i];

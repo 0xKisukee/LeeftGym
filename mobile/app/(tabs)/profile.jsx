@@ -6,8 +6,10 @@ import {useEffect, useState} from "react";
 import WorkoutBox from "../../components/WorkoutBox";
 import getWorkouts from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
+import me from "../../api/me";
 
 export default function Profile() {
+    const [userInfo, setUserInfo] = useState(null); // Add state to store user info
     const [workoutsList, setWorkoutsList] = useState([]);
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
 
@@ -16,19 +18,31 @@ export default function Profile() {
         router.replace("/");
     }
 
+    const fetchUser = async () => {
+        const jwtToken = await getValueFor("userJWT");
+        const infos = await me(jwtToken);
+        setUserInfo(infos); // Update state with user info
+    };
+
     const fetchWorkouts = async () => {
-        const jwtToken = await getValueFor("userJWT"); // Get the token
+        const jwtToken = await getValueFor("userJWT");
         const workouts = await getWorkouts(jwtToken); // Fetch workouts with token
-        setWorkoutsList(workouts); // Update state
+        setWorkoutsList(workouts); // Update state with workouts
     };
 
     useEffect(() => {
+        fetchUser();
         fetchWorkouts();
     }, [isFocused]); // fetch on every navigation
 
+    if (!userInfo) {
+        return <Text>Loading...</Text>; // Render a loading state if user info is not available yet
+    }
+
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <Text>Profile</Text>
+            <Text>Bonjour {userInfo.email}</Text>
             <AppBtn
                 title="Deconnexion"
                 handlePress={() => {
