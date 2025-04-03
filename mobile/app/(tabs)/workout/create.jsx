@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from "@react-navigation/native";
 import Chronometer from "../../../components/Chrono";
 import ExerciseBoxCreate from "../../../components/ExerciseBoxCreate";
-import SetBoxCreate from "../../../components/SetBoxCreate";
+import chooseExo from "./chooseExo";
 
 export default function Create() {
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
@@ -71,31 +71,8 @@ export default function Create() {
         router.back();
     }
 
-    // Add exercise to state
-    const addExercise = (exoId) => {
-        // Calculate order
-        const defaultOrder = createdWorkout.WorkoutExercises.length + 1;
-
-        // Create the new exercise object
-        const newExercise = {
-            order: defaultOrder,
-            rest_time: 180,
-            exercise_id: exoId,
-            Sets: []
-        };
-
-        // Create a new workout object with the updated exercise list
-        const updatedWorkout = {
-            ...createdWorkout, // Copy existing workout data
-            WorkoutExercises: createdWorkout.WorkoutExercises.concat(newExercise) // Create a new array
-        };
-
-        // Update state
-        setCreatedWorkout(updatedWorkout);
-    };
-
     // Add set to state
-    const addSet = (exerciseOrder, reps) => {
+    const addSet = (exerciseOrder, reps, weight) => {
         // Copier l'objet actuel
         const updatedWorkout = {...createdWorkout};
 
@@ -105,8 +82,8 @@ export default function Create() {
                 // Créer le nouvel ensemble (set)
                 const newSet = {
                     order: exercise.Sets.length + 1,
-                    weight: 60, // Valeur par défaut
-                    reps: reps,
+                    weight: weight || 40, // Valeur par défaut
+                    reps: reps || 12,
                     completed: true,
                 };
 
@@ -127,7 +104,7 @@ export default function Create() {
     const renderExercise = ({ item }) => (
         <ExerciseBoxCreate
             exercise={item}
-            handlePress={() => addSet(item.order, 12)}
+            onAddSet={() => addSet(item.order, 12, 40)}
         />
     );
 
@@ -136,7 +113,7 @@ export default function Create() {
         <View>
             <AppBtn
                 title="Ajouter un exercice"
-                handlePress={() => addExercise(1)} // Example exercise ID
+                handlePress={() => router.push("/workout/chooseExo")} // Example exercise ID
             />
             <AppBtn
                 title="Terminer la séance"
@@ -150,18 +127,16 @@ export default function Create() {
     );
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
+            <>
+                <Text>Workout - Create</Text>
+                <Chronometer
+                    startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
+                />
+            </>
             <FlatList
                 data={createdWorkout.WorkoutExercises}
                 renderItem={renderExercise}
-                ListHeaderComponent={
-                    <>
-                        <Text>Workout - Create</Text>
-                        <Chronometer
-                            startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
-                        />
-                    </>
-                }
                 ListFooterComponent={renderFooter}
             />
         </SafeAreaView>

@@ -1,20 +1,50 @@
-import {Text, View, StyleSheet, SafeAreaView, TextInput} from "react-native";
+import {Text, View, SafeAreaView, TextInput} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
-import {useState} from "react";
-import {createWorkout} from "../../../api/workouts";
+import {useEffect, useState} from "react";
 import {router} from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function Index() {
+    const [pendingWorkout, setPendingWorkout] = useState(false);
+    const isFocused = useIsFocused();
+
+    // Retrieve workout data from AsyncStorage when the app starts
+    useEffect(() => {
+        const loadWorkoutData = async () => {
+            try {
+                const savedData = await AsyncStorage.getItem('workoutData');
+                if (savedData !== null) {
+                    setPendingWorkout(true);
+                } else {
+                    setPendingWorkout(false);
+                }
+            } catch (e) {
+                console.error("Failed to load workout data", e);
+            }
+        };
+
+        loadWorkoutData();
+    }, [isFocused]);
 
     return (
         <SafeAreaView>
             <Text>Workout - Index</Text>
 
-            <AppBtn
-                title="Commencer un entrainement"
-                handlePress={() => router.push("/workout/create")}
-            />
+            {pendingWorkout &&
+                <AppBtn
+                    title="Reprendre votre entrainement"
+                    handlePress={() => router.push("/workout/create")}
+                />
+            }
+
+            {!pendingWorkout &&
+                <AppBtn
+                    title="Commencer un entrainement"
+                    handlePress={() => router.push("/workout/create")}
+                />
+            }
         </SafeAreaView>
     );
 }

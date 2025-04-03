@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Text } from "react-native";
+import {useIsFocused} from "@react-navigation/native";
 
 // Fonction pour formater le temps en HH:MM:SS
 function formatTime(seconds) {
@@ -11,6 +12,7 @@ function formatTime(seconds) {
 
 export default function Chronometer({ startTimestamp }) {
     const [time, setTime] = useState(startTimestamp); // Temps en secondes
+    const isFocused = useIsFocused(); // Check if screen is opened to refresh timer
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -18,7 +20,7 @@ export default function Chronometer({ startTimestamp }) {
         }, 1000);
 
         return () => clearInterval(interval); // Nettoyage à la suppression du composant
-    }, []); // Dépendance vide, donc l'effet s'exécute une seule fois
+    }, [isFocused]);
 
     return <Text className="text-2xl font-bold">{formatTime(time - startTimestamp)}</Text>; // Afficher le temps formaté
 }

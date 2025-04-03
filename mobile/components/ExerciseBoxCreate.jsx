@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import AppBtn from "./AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
 
-export default function ExerciseBoxCreate({exercise, handlePress}) {
+export default function ExerciseBoxCreate({exercise, onAddSet}) {
     const [exoName, setExoName] = useState("");
 
     useEffect(() => {
@@ -43,7 +43,7 @@ export default function ExerciseBoxCreate({exercise, handlePress}) {
 
             <AppBtn
                 title="Ajouter une série"
-                handlePress={handlePress}
+                handlePress={onAddSet}
             />
         </View>
     )

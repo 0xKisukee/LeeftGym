@@ -40,7 +40,14 @@ export default function Create() {
     const saveWorkout = async (createdWorkout) => {
         // if check needed use this
         // const pushResult = await pushWorkout(createdWorkout);
-        await pushWorkout(createdWorkout);
+        console.log(createdWorkout.name);
+        if (!createdWorkout.name) {
+            const updatedWorkout = {...createdWorkout};
+            updatedWorkout.name = "Entraînement du soir";
+            await pushWorkout(updatedWorkout);
+        } else {
+            await pushWorkout(createdWorkout);
+        }
 
         // Delete workout from local storage
         await AsyncStorage.removeItem('workoutData');
