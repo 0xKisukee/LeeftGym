@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const auth = require("./middlewares/authentication")
 const authController = require('./controllers/auth.controller');
-const exerciseController = require('./controllers/exercise.controller');
+const exoController = require('./controllers/exo.controller');
 const workoutController = require('./controllers/workout.controller');
-const workoutExerciseController = require('./controllers/workoutExercise.controller');
+const exerciseController = require('./controllers/exercise.controller');
 const setController = require('./controllers/set.controller');
 
 // Public routes
@@ -46,13 +46,13 @@ router.post(
 router.post(
     '/workouts/:id/exercises',
     auth.authenticateJwt,
-    workoutExerciseController.store,
+    exerciseController.store,
 );
 
 router.get(
-    '/exercises/:id',
+    '/exos/:id',
     auth.authenticateJwt,
-    exerciseController.show,
+    exoController.show,
 );
 
 router.post(
@@ -65,9 +65,9 @@ router.post(
 
 // Setup admin auth later, now it's just a simple auth
 router.post(
-    '/exercises',
+    '/exos',
     auth.authenticateJwt,
-    exerciseController.store,
+    exoController.store,
 );
 
 module.exports = router;

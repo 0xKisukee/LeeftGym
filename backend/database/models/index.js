@@ -1,8 +1,8 @@
 // Import models
 const User = require('./User.model');
-const Exercise = require('./Exercise.model');
+const Exo = require('./Exo.model');
 const Workout = require('./Workout.model');
-const WorkoutExercise = require('./WorkoutExercise.model');
+const Exercise = require('./Exercise.model');
 const Set = require('./Set.model');
 
 // Users have multiple workouts
@@ -14,34 +14,34 @@ Workout.belongsTo(User, {
 });
 
 // Each workout has a list of ordered exercises
-Workout.hasMany(WorkoutExercise, {
+Workout.hasMany(Exercise, {
     foreignKey: 'workout_id'
 });
-WorkoutExercise.belongsTo(Workout, {
+Exercise.belongsTo(Workout, {
     foreignKey: 'workout_id'
 });
 
 // Each workout exercise corresponds to an exercise
-Exercise.hasMany(WorkoutExercise, {
-    foreignKey: 'exercise_id'
+Exo.hasMany(Exercise, {
+    foreignKey: 'exo_id'
 });
-WorkoutExercise.belongsTo(Exercise, {
-    foreignKey: 'exercise_id'
+Exercise.belongsTo(Exo, {
+    foreignKey: 'exo_id'
 });
 
 // Each workout exercise has many ordered sets
-WorkoutExercise.hasMany(Set, {
-    foreignKey: 'workout_exercise_id'
+Exercise.hasMany(Set, {
+    foreignKey: 'exercise_id'
 });
-Set.belongsTo(WorkoutExercise, {
-    foreignKey: 'workout_exercise_id'
+Set.belongsTo(Exercise, {
+    foreignKey: 'exercise_id'
 });
 
 // Export all models
 module.exports = {
     User,
-    Exercise,
+    Exo,
     Workout,
-    WorkoutExercise,
+    Exercise,
     Set,
 };

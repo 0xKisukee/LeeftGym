@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('workout_exercises', {
+    await queryInterface.createTable('exercises', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -29,11 +29,11 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      exercise_id: {
+      exo_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'exercises',
+          model: 'exos',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -43,6 +43,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('workout_exercises');
+    await queryInterface.dropTable('exercises');
   }
 };

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
-const Exercise = sequelize.define('Exercise', {
+const Exo = sequelize.define('Exo', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -14,9 +14,9 @@ const Exercise = sequelize.define('Exercise', {
         unique: true,
     },
 }, {
-    tableName: 'exercises',
+    tableName: 'exos',
     createdAt: false,
     updatedAt: false,
 });
 
-module.exports = Exercise;
+module.exports = Exo;

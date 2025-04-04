@@ -30,11 +30,11 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      workout_exercise_id: {
+      exercise_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'workout_exercises',
+          model: 'exercises',
           key: 'id'
         },
         onUpdate: 'CASCADE',
