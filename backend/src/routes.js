@@ -4,7 +4,7 @@ const auth = require("./middlewares/authentication")
 const authController = require('./controllers/auth.controller');
 const exoController = require('./controllers/exo.controller');
 const workoutController = require('./controllers/workout.controller');
-const exerciseController = require('./controllers/exercise.controller');
+const exerciseController = require('./controllers/exo.controller');
 const setController = require('./controllers/set.controller');
 
 // Public routes
