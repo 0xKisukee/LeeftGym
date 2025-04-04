@@ -64,6 +64,8 @@ export default async function pushWorkout(workout) {
             for (let i = 0; i < sets.length; i++) {
                 const set = sets[i];
 
+                if (!set.completed) continue;
+
                 const setResponse = await fetch(
                     API_URL + '/exercises/' + exoId + '/sets',
                     {

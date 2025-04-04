@@ -23,12 +23,8 @@ export default function ChooseExo() {
             "name": "bench"
         },
         {
-            "id": 2,
-            "name": "curl biceps"
-        },
-        {
             "id": 3,
-            "name": "tractions"
+            "name": "curl biceps"
         },
         {
             "id": 4,

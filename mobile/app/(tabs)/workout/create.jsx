@@ -5,9 +5,10 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from "@react-navigation/native";
-import Chronometer from "../../../components/Chrono";
+import WorkoutTimer from "../../../components/WorkoutTimer";
 import ExerciseBoxCreate from "../../../components/ExerciseBoxCreate";
 import chooseExo from "./chooseExo";
+import RestTimer from "../../../components/RestTimer";
 
 export default function Create() {
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
@@ -22,6 +23,8 @@ export default function Create() {
     }
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
+    const [restTimer, setRestTimer] = useState(0);
+    const [restTrigger, setRestTrigger] = useState(0);
 
     // Retrieve workout data from AsyncStorage when the app starts
     useEffect(() => {
@@ -84,7 +87,7 @@ export default function Create() {
                     order: exercise.Sets.length + 1,
                     weight: weight || 40, // Valeur par défaut
                     reps: reps || 12,
-                    completed: true,
+                    completed: false,
                 };
 
                 // Ajouter le set à l'exercice
@@ -105,6 +108,20 @@ export default function Create() {
         <ExerciseBoxCreate
             exercise={item}
             onAddSet={() => addSet(item.order, 12, 40)}
+            onSetChange={(updatedExercise) => {
+                const updatedWorkout = {
+                    ...createdWorkout,
+                    WorkoutExercises: createdWorkout.WorkoutExercises.map(exercise =>
+                        exercise.order === updatedExercise.order ? updatedExercise : exercise
+                    )
+                };
+                setCreatedWorkout(updatedWorkout);
+            }}
+            onSetCompleted={() => {
+                console.log("pressed");
+                setRestTimer(item.rest_time || 120); // Default to 120 seconds if no rest time specified
+                setRestTrigger(prev => prev + 1); // Increment trigger to start rest timer
+            }}
         />
     );
 
@@ -128,16 +145,18 @@ export default function Create() {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <>
-                <Text>Workout - Create</Text>
-                <Chronometer
-                    startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
-                />
-            </>
+            <Text>Workout - Create</Text>
+            <WorkoutTimer
+                startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
+            />
             <FlatList
                 data={createdWorkout.WorkoutExercises}
                 renderItem={renderExercise}
                 ListFooterComponent={renderFooter}
+            />
+            <RestTimer
+                restDuration={restTimer}
+                trigger={restTrigger}
             />
         </SafeAreaView>
     );

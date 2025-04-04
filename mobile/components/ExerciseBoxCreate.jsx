@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import AppBtn from "./AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
 
-export default function ExerciseBoxCreate({exercise, onAddSet}) {
+export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
     const [exoName, setExoName] = useState("");
 
     useEffect(() => {
@@ -18,8 +18,20 @@ export default function ExerciseBoxCreate({exercise, onAddSet}) {
         fetchExerciseName();
     }, []);
 
+    const handleSetChange = (updatedSet) => {
+        if (onSetChange) {
+            const updatedExercise = {
+                ...exercise,
+                Sets: exercise.Sets.map(set => 
+                    set.order === updatedSet.order ? updatedSet : set
+                )
+            };
+            onSetChange(updatedExercise);
+        }
+    };
+
     return (
-        <View className="mx-3 my-3 border-2 border-gray-500">
+        <View className="mx-3 my-3 border-2 border-blue-500">
             <Text className="mx-5 text-xl">{exoName}</Text>
             <TextInput
                 className="mx-3 my-2"
@@ -27,17 +39,24 @@ export default function ExerciseBoxCreate({exercise, onAddSet}) {
             />
 
             <View
-                style={{flexDirection: "row", justifyContent: "space-around"}}
+                className="flex-row justify-around border-b-2 border-gray-700 py-2"
             >
-                <Text>Série</Text>
-                <Text>Kg</Text>
-                <Text>Reps</Text>
+                <Text className="text-xl">Série</Text>
+                <Text className="text-xl">Kg</Text>
+                <Text className="text-xl">Reps</Text>
+                <Text className="text-xl">Completed</Text>
             </View>
 
             {exercise.Sets.length > 0 &&
                 <FlatList
                     data={exercise.Sets}
-                    renderItem={({item}) => <SetBoxCreate set={item}/>}
+                    renderItem={({item}) => (
+                        <SetBoxCreate 
+                            set={item} 
+                            onSetChange={handleSetChange}
+                            onSetCompleted={onSetCompleted}
+                        />
+                    )}
                 />
             }
 

@@ -10,17 +10,22 @@ function formatTime(seconds) {
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
-export default function Chronometer({ startTimestamp }) {
-    const [time, setTime] = useState(startTimestamp); // Temps en secondes
-    const isFocused = useIsFocused(); // Check if screen is opened to refresh timer
+export default function WorkoutTimer({ startTimestamp }) {
+    const [currentTimestamp, setCurrentTimestamp] = useState(Math.floor(new Date().getTime()/1000));
+    const isFocused = useIsFocused();
 
     useEffect(() => {
+        if (!isFocused) return;
+
+        // Better UX
+        setCurrentTimestamp(Math.floor(new Date().getTime()/1000));
+
         const interval = setInterval(() => {
-            setTime((prevTime) => prevTime + 1);
+            setCurrentTimestamp(Math.floor(new Date().getTime()/1000));
         }, 1000);
 
-        return () => clearInterval(interval); // Nettoyage à la suppression du composant
+        return () => clearInterval(interval);
     }, [isFocused]);
 
-    return <Text className="text-2xl font-bold">{formatTime(time - startTimestamp)}</Text>; // Afficher le temps formaté
+    return <Text className="text-2xl font-bold">{formatTime(currentTimestamp - startTimestamp)}</Text>;
 }

@@ -30,7 +30,7 @@ export default function ExerciseBox({exercise}) {
 
             {exercise.Sets.length > 0 &&
                 <FlatList
-                    data={exercise.Sets}
+                    data={exercise.Sets.filter(set => set.completed)}
                     renderItem={({item}) => <SetBox set={item}/>}
                 />
             }
