@@ -7,32 +7,12 @@ module.exports = {
         id: 1,
         name: 'Entraînement Poitrine',
         is_private: false,
-        started_at: null,
+        started_at: "2025-04-05 23:57:33.034+02",
         completed_at: null,
         is_routine: false,
         user_id: 1,
         createdAt: new Date()
       },
-      {
-        id: 2,
-        name: 'Entraînement Jambes',
-        is_private: true,
-        started_at: null,
-        completed_at: null,
-        is_routine: false,
-        user_id: 1,
-        createdAt: new Date()
-      },
-      {
-        id: 3,
-        name: 'Routine Matinale',
-        is_private: false,
-        started_at: null,
-        completed_at: null,
-        is_routine: true,
-        user_id: 2,
-        createdAt: new Date()
-      }
     ], {});
 
     // Remet à jour le compteur de la séquence

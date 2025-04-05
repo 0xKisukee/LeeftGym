@@ -9,18 +9,6 @@ module.exports = {
         password: '$2b$10$/IEbvMCIA1H07r4BUUZPPefFHyBK7yX90.gJz9yKfAwK3OZlrQrm.', // À remplacer par un vrai hash
         createdAt: new Date(),
       },
-      {
-        id: 2,
-        email: 'jane@example.com',
-        password: '$2b$10$/IEbvMCIA1H07r4BUUZPPefFHyBK7yX90.gJz9yKfAwK3OZlrQrm.', // À remplacer par un vrai hash
-        createdAt: new Date(),
-      },
-      {
-        id: 3,
-        email: 'mike@example.com',
-        password: '$2b$10$/IEbvMCIA1H07r4BUUZPPefFHyBK7yX90.gJz9yKfAwK3OZlrQrm.', // À remplacer par un vrai hash
-        createdAt: new Date(),
-      }
     ], {});
 
     // Remet à jour le compteur de la séquence
