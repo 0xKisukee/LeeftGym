@@ -59,6 +59,16 @@ export default function Create() {
     }, [createdWorkout]);
 
     const confirmWorkout = async () => {
+        // Check if any exercise has 0 sets
+        const hasEmptyExercises = createdWorkout.WorkoutExercises.some(
+            exercise => exercise.Sets.length === 0
+        );
+
+        if (hasEmptyExercises) {
+            alert("Vous ne pouvez pas creer d'exercices vides.");
+            return;
+        }
+
         // Save workout to local storage
         await AsyncStorage.setItem('workoutData', JSON.stringify(createdWorkout));
 
