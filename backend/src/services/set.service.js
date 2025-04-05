@@ -3,7 +3,7 @@ const models = require('../../database/models');
 const {Op} = require("sequelize");
 
 async function store(userId, exerciseId, data) {
-    const exercise = await models.WorkoutExercise.findByPk(exerciseId);
+    const exercise = await models.Exercise.findByPk(exerciseId);
     if (!exercise) {
         throw new AppError('Exercise not found', 404);
     }
@@ -18,7 +18,7 @@ async function store(userId, exerciseId, data) {
     let orderValue;
     // Get amount of exercises in the workout
     const sets = await models.Set.findAll({
-        where: {workout_exercise_id: exerciseId}
+        where: {exercise_id: exerciseId}
     });
 
     if (!data.order) {
@@ -33,7 +33,7 @@ async function store(userId, exerciseId, data) {
         // If a set with this order already exists, shift other sets
         const existingSets = await models.Set.findAll({
             where: {
-                workout_exercise_id: exerciseId,
+                exercise_id: exerciseId,
                 order: {[Op.gte]: orderValue}
             }
         });
@@ -45,7 +45,7 @@ async function store(userId, exerciseId, data) {
     }
 
     return await models.Set.create({
-        workout_exercise_id: exerciseId,
+        exercise_id: exerciseId,
         order: orderValue,
         weight: data.weight,
         reps: data.reps,

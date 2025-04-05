@@ -1,4 +1,5 @@
-const API_URL = 'https://gym.leeft.fun/api';
+const API_URL_2 = 'https://gym.leeft.fun/api';
+const API_URL = 'http://localhost:3000/api';
 
 export default async function login(email, password) {
     try {

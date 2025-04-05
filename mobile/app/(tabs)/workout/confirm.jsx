@@ -16,7 +16,7 @@ export default function Create() {
         started_at: new Date(), // i think we remove this and just push it in local storage to wait for completion to push
         completed_at: null,
         is_routine: false, // state of a checkbox
-        WorkoutExercises: [],
+        Exercises: [],
     }
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
@@ -40,7 +40,6 @@ export default function Create() {
     const saveWorkout = async (createdWorkout) => {
         // if check needed use this
         // const pushResult = await pushWorkout(createdWorkout);
-        console.log(createdWorkout.name);
         if (!createdWorkout.name) {
             const updatedWorkout = {...createdWorkout};
             updatedWorkout.name = "Entraînement du soir";

@@ -9,7 +9,7 @@ export default function ExerciseBox({exercise}) {
 
     useEffect(() => {
         async function fetchExerciseName() {
-            const name = await getExoNameById(exercise.exercise_id);
+            const name = await getExoNameById(exercise.exo_id);
             setExoName(name);
         }
 

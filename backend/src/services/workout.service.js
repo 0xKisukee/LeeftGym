@@ -8,12 +8,12 @@ async function index(userId) {
         },
         include: [
             {
-                model: models.WorkoutExercise,
-                as: 'WorkoutExercises',
+                model: models.Exercise,
+                as: 'Exercises',
                 include: [
                     {
-                        model: models.Exercise,
-                        as: 'Exercise',
+                        model: models.Exo,
+                        as: 'Exo',
                     },
                     {
                         model: models.Set,
@@ -29,12 +29,12 @@ async function show(userId, workoutId) {
     const workout = await models.Workout.findByPk(workoutId, {
         include: [
             {
-                model: models.WorkoutExercise,
-                as: 'WorkoutExercises',
+                model: models.Exercise,
+                as: 'Exercises',
                 include: [
                     {
-                        model: models.Exercise,
-                        as: 'Exercise',
+                        model: models.Exo,
+                        as: 'Exos',
                     },
                     {
                         model: models.Set,

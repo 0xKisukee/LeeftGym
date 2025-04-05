@@ -1,13 +1,14 @@
 import {getValueFor} from "./jwt";
 
-const API_URL = 'https://gym.leeft.fun/api';
+const API_URL_2 = 'https://gym.leeft.fun/api';
+const API_URL = 'http://localhost:3000/api';
 
-export default async function getExoNameById(exerciseId) {
+export default async function getExoNameById(exoId) {
     try {
         const jwtToken = await getValueFor("userJWT");
 
         const response = await fetch(
-            API_URL + '/exercises/' + exerciseId,
+            API_URL + '/exos/' + exoId,
             {
                 method: 'GET',
                 headers: {

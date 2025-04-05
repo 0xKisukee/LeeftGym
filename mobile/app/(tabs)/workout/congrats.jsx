@@ -13,7 +13,7 @@ export default function Create() {
         started_at: new Date(), // i think we remove this and just push it in local storage to wait for completion to push
         completed_at: null,
         is_routine: false, // state of a checkbox
-        WorkoutExercises: [],
+        Exercises: [],
     }
 
 

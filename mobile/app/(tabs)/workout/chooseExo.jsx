@@ -12,7 +12,7 @@ export default function ChooseExo() {
         started_at: new Date(),
         completed_at: null,
         is_routine: false,
-        WorkoutExercises: [],
+        Exercises: [],
     };
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
@@ -54,18 +54,18 @@ export default function ChooseExo() {
 
     // Function to add exercise
     const addExercise = async (exoId) => {
-        const defaultOrder = createdWorkout.WorkoutExercises.length + 1;
+        const defaultOrder = createdWorkout.Exercises.length + 1;
 
         const newExercise = {
             order: defaultOrder,
             rest_time: 180,
-            exercise_id: exoId,
+            exo_id: exoId,
             Sets: [],
         };
 
         const updatedWorkout = {
             ...createdWorkout,
-            WorkoutExercises: [...createdWorkout.WorkoutExercises, newExercise],
+            Exercises: [...createdWorkout.Exercises, newExercise],
         };
 
         setCreatedWorkout(updatedWorkout);

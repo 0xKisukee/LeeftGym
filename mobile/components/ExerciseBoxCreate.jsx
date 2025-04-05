@@ -11,7 +11,7 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
 
     useEffect(() => {
         async function fetchExerciseName() {
-            const name = await getExoNameById(exercise.exercise_id);
+            const name = await getExoNameById(exercise.exo_id);
             setExoName(name);
         }
 

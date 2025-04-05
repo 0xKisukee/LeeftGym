@@ -19,7 +19,7 @@ export default function Create() {
         started_at: new Date(), // i think we remove this and just push it in local storage to wait for completion to push
         completed_at: null,
         is_routine: false, // state of a checkbox
-        WorkoutExercises: [],
+        Exercises: [],
     }
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
@@ -60,7 +60,7 @@ export default function Create() {
 
     const confirmWorkout = async () => {
         // Check if any exercise has 0 sets
-        const hasEmptyExercises = createdWorkout.WorkoutExercises.some(
+        const hasEmptyExercises = createdWorkout.Exercises.some(
             exercise => exercise.Sets.length === 0
         );
 
@@ -90,7 +90,7 @@ export default function Create() {
         const updatedWorkout = {...createdWorkout};
 
         // Trouver l'exercice correspondant
-        const updatedExercises = updatedWorkout.WorkoutExercises.map((exercise) => {
+        const updatedExercises = updatedWorkout.Exercises.map((exercise) => {
             if (exercise.order === exerciseOrder) {
                 // Créer le nouvel ensemble (set)
                 const newSet = {
@@ -110,7 +110,7 @@ export default function Create() {
         });
 
         // Mettre à jour l'état
-        updatedWorkout.WorkoutExercises = updatedExercises;
+        updatedWorkout.Exercises = updatedExercises;
         setCreatedWorkout(updatedWorkout);
     };
 
@@ -121,7 +121,7 @@ export default function Create() {
             onSetChange={(updatedExercise) => {
                 const updatedWorkout = {
                     ...createdWorkout,
-                    WorkoutExercises: createdWorkout.WorkoutExercises.map(exercise =>
+                    Exercises: createdWorkout.Exercises.map(exercise =>
                         exercise.order === updatedExercise.order ? updatedExercise : exercise
                     )
                 };
@@ -160,7 +160,7 @@ export default function Create() {
                 startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
             />
             <FlatList
-                data={createdWorkout.WorkoutExercises}
+                data={createdWorkout.Exercises}
                 renderItem={renderExercise}
                 ListFooterComponent={renderFooter}
             />

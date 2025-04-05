@@ -1,7 +1,8 @@
 import {getValueFor} from "./jwt";
 import getExoNameById from "./exercises";
 
-const API_URL = 'https://gym.leeft.fun/api';
+const API_URL_2 = 'https://gym.leeft.fun/api';
+const API_URL = 'http://localhost:3000/api';
 
 export default async function pushWorkout(workout) {
     try {
@@ -26,17 +27,18 @@ export default async function pushWorkout(workout) {
             }
         );
         const workoutJson = await workoutResponse.json();
+        console.log("workout pushed:", workoutJson);
         const workoutId = workoutJson.id;
 
 
 
         // Push Exercises
-        const workoutExos = workout.WorkoutExercises;
+        const exercises = workout.Exercises;
 
-        for (let i = 0; i < workoutExos.length; i++) {
-            const workoutExo = workoutExos[i];
+        for (let i = 0; i < exercises.length; i++) {
+            const exercise = exercises[i];
 
-            const exoResponse = await fetch(
+            const exerciseResponse = await fetch(
                 API_URL + '/workouts/' + workoutId + '/exercises',
                 {
                     method: 'POST',
@@ -46,20 +48,20 @@ export default async function pushWorkout(workout) {
                         'Authorization': `Bearer ${jwtToken}`
                     },
                     body: JSON.stringify({
-                        exercise_id: workoutExo.exercise_id,
-                        order: workoutExo.order,
-                        rest_time: workoutExo.rest_time,
+                        exo_id: exercise.exo_id,
+                        order: exercise.order,
+                        rest_time: exercise.rest_time,
                     }),
                 }
             );
-            const exoJson = await exoResponse.json();
-            console.log("exo pushed:", exoJson);
-            const exoId = exoJson.id;
+            const exerciseJson = await exerciseResponse.json();
+            console.log("exercise pushed:", exerciseJson);
+            const exerciseId = exerciseJson.id;
 
 
 
             // Push sets
-            const sets = await workoutExo.Sets;
+            const sets = await exercise.Sets;
 
             for (let i = 0; i < sets.length; i++) {
                 const set = sets[i];
@@ -67,7 +69,7 @@ export default async function pushWorkout(workout) {
                 if (!set.completed) continue;
 
                 const setResponse = await fetch(
-                    API_URL + '/exercises/' + exoId + '/sets',
+                    API_URL + '/exercises/' + exerciseId + '/sets',
                     {
                         method: 'POST',
                         headers: {
@@ -83,8 +85,8 @@ export default async function pushWorkout(workout) {
                         }),
                     }
                 );
-                const qqq = await setResponse.json();
-                console.log("set pushed:", qqq);
+                const setJson = await setResponse.json();
+                console.log("set pushed:", setJson);
             }
         }
         return true
