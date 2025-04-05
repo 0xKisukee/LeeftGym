@@ -1,22 +1,26 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
-const Exo = sequelize.define('Exo', {
+const Exercise = sequelize.define('Exercise', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
     },
-    name: {
-        type: DataTypes.STRING,
+    order: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    rest_time: { // Later it would be better if we can set a different rest time for each set
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
+        defaultValue: 180,
     },
 }, {
-    tableName: 'exos',
+    tableName: 'exercises',
     createdAt: false,
     updatedAt: false,
 });
 
-module.exports = Exo;
+module.exports = Exercise;
