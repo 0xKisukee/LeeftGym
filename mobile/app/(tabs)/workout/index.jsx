@@ -6,7 +6,7 @@ import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused} from "@react-navigation/native";
 import {ScreenContainer} from "../../../components/ScreenContainer";
-import {Title} from "../../../components/StyledText";
+import {SubTitle, Title} from "../../../components/StyledText";
 
 export default function Index() {
     const [pendingWorkout, setPendingWorkout] = useState(false);
@@ -32,7 +32,7 @@ export default function Index() {
 
     return (
         <ScreenContainer>
-            <Title>Workout - Commencer</Title>
+            <Title>Workout</Title>
 
             {pendingWorkout &&
                 <AppBtn
@@ -47,6 +47,8 @@ export default function Index() {
                     handlePress={() => router.push("/workout/create")}
                 />
             }
+
+            <SubTitle className="mt-5">Routines</SubTitle>
         </ScreenContainer>
     );
 }

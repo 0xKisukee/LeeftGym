@@ -1,8 +1,8 @@
 import {getValueFor} from "./jwt";
 import getExoNameById from "./exercises";
 
-const API_URL = 'https://gym.leeft.fun/api';
-const API_URL_2 = 'http://localhost:3000/api';
+const API_URL2 = 'https://gym.leeft.fun/api';
+const API_URL = 'http://localhost:3000/api';
 
 export default async function pushWorkout(workout) {
     try {

@@ -5,6 +5,8 @@ import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getItem} from "expo-secure-store";
 import {useExos} from "../../../contexts/ExoContext";
+import {ScreenContainer} from "../../../components/ScreenContainer";
+import {BodyText, SubTitle, Title} from "../../../components/StyledText";
 
 export default function ChooseExo() {
     const emptyWorkout = {
@@ -72,11 +74,13 @@ export default function ChooseExo() {
         />
 
     return (
-        <SafeAreaView>
-            <Text>Workout - Choose Exo</Text>
-            <Text>Choisissez un exercice à ajouter à votre workout</Text>
+        <ScreenContainer>
+            <Title className="mb-3">Workout - Choose Exo</Title>
+            <BodyText className="mb-2">Choisissez un exercice à ajouter à votre workout</BodyText>
             <TextInput
-                placeholder="Chercher un exercice (fonctionnalité à venir)"
+                className="text-text h-12 px-2 my-1 w-full bg-bgsec rounded-lg"
+                placeholder="Recherchez un exercice (fonctionnalité à venir)"
+                placeholderTextColor="#a8a8a8"
             />
 
             <FlatList
@@ -84,6 +88,6 @@ export default function ChooseExo() {
                 renderItem={({ item }) => (exoBtn(item))}
             />
 
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }
