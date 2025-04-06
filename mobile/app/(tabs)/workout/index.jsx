@@ -21,21 +21,22 @@ export default function Index() {
         setRoutinesList(workouts); // Update state with workouts
     };
 
+    const loadWorkoutData = async () => {
+        try {
+            const savedData = await AsyncStorage.getItem('workoutData');
+            if (savedData !== null) {
+                setPendingWorkout(true);
+            } else {
+                setPendingWorkout(false);
+            }
+        } catch (e) {
+            console.error("Failed to load workout data", e);
+        }
+    };
+
     // Retrieve workout data from AsyncStorage when the app starts
     useEffect(() => {
-        const loadWorkoutData = async () => {
-            try {
-                const savedData = await AsyncStorage.getItem('workoutData');
-                if (savedData !== null) {
-                    setPendingWorkout(true);
-                } else {
-                    setPendingWorkout(false);
-                }
-            } catch (e) {
-                console.error("Failed to load workout data", e);
-            }
-        };
-
+        console.log("useeffect");
         loadWorkoutData();
         fetchRoutines();
     }, [isFocused]);
@@ -70,9 +71,7 @@ export default function Index() {
                         }}
                     />
                 )}
-            >
-
-            </FlatList>
+            />
         </ScreenContainer>
     );
 }

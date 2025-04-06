@@ -1,5 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
-import me from "./me";
+
+const API_URL = 'https://gym.leeft.fun/api';
+const API_URL2 = 'http://localhost:3000/api';
 
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
@@ -16,6 +18,30 @@ async function forget(key) {
     return true;
 }
 
+async function me() {
+    try {
+        const jwtToken = await getValueFor("userJWT");
+
+        const response = await fetch(
+            API_URL + '/me',
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+            }
+        );
+
+        const json = await response.json();
+        return json;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function isAuth() {
     const token = await getValueFor("userJWT");
     if (!token) {
@@ -23,7 +49,7 @@ async function isAuth() {
         return false;
     }
 
-    const userInfos = await me(token);
+    const userInfos = await me();
 
     if (!userInfos.userId) {
         console.log("auth expired");
@@ -39,4 +65,5 @@ module.exports = {
     getValueFor,
     forget,
     isAuth,
+    me,
 }

@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import WorkoutBox from "../../../components/boxes/WorkoutBox";
 import {getWorkouts} from "../../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
-import me from "../../../api/me";
+import {me} from "../../../api/jwt";
 import {SubTitle, Title} from "../../../components/StyledText";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 
@@ -21,8 +21,7 @@ export default function Profile() {
     }
 
     const fetchUser = async () => {
-        const jwtToken = await getValueFor("userJWT");
-        const infos = await me(jwtToken);
+        const infos = await me();
         setUserInfo(infos);
     };
 

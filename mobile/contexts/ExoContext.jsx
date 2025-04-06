@@ -7,6 +7,7 @@ export function ExoProvider({ children }) {
     const [allExos, setAllExos] = useState([]);
 
     useEffect(() => {
+        // remove this from use effect
         async function fetchExos() {
             const data = await getAllExos();
             setAllExos(data);

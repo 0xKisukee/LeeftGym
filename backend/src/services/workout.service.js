@@ -21,7 +21,8 @@ async function index(userId) {
                     }
                 ]
             }
-        ]
+        ],
+        order: [['createdAt', 'DESC']]
     })
 }
 
@@ -88,7 +89,8 @@ async function getRoutines(userId) {
                     }
                 ]
             }
-        ]
+        ],
+        order: [['createdAt', 'DESC']]
     })
 
     return workouts;
