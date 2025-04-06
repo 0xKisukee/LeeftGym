@@ -4,7 +4,7 @@ import {forget, getValueFor} from "../../api/jwt";
 import {router} from "expo-router";
 import {useEffect, useState} from "react";
 import WorkoutBox from "../../components/WorkoutBox";
-import getWorkouts from "../../api/workouts";
+import {getWorkouts} from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import me from "../../api/me";
 import {SubTitle, Title} from "../../components/StyledText";
@@ -27,8 +27,7 @@ export default function Profile() {
     };
 
     const fetchWorkouts = async () => {
-        const jwtToken = await getValueFor("userJWT");
-        const workouts = await getWorkouts(jwtToken); // Fetch workouts with token
+        const workouts = await getWorkouts(); // Fetch workouts with token
         setWorkoutsList(workouts); // Update state with workouts
     };
 

@@ -36,7 +36,6 @@ export default function ChooseExo() {
         };
 
         loadWorkoutData();
-        console.log(allExos);
     }, []);
 
     // Function to add exercise

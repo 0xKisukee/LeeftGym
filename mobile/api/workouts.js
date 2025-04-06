@@ -3,10 +3,36 @@ import {getValueFor} from "./jwt";
 const API_URL2 = 'https://gym.leeft.fun/api';
 const API_URL = 'http://localhost:3000/api';
 
-export default async function getWorkouts(jwtToken) {
+export async function getWorkouts() {
     try {
+        const jwtToken = await getValueFor("userJWT");
+
         const response = await fetch(
             API_URL + '/workouts',
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+            }
+        );
+
+        const json = await response.json();
+        return json;
+
+    } catch (error) {
+        alert(error);
+    }
+}
+
+export async function getRoutines() {
+    try {
+        const jwtToken = await getValueFor("userJWT");
+
+        const response = await fetch(
+            API_URL + '/workouts/routines',
             {
                 method: 'GET',
                 headers: {

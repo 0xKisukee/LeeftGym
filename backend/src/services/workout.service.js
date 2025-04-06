@@ -34,7 +34,7 @@ async function show(userId, workoutId) {
                 include: [
                     {
                         model: models.Exo,
-                        as: 'Exos',
+                        as: 'Exo',
                     },
                     {
                         model: models.Set,
@@ -60,14 +60,43 @@ async function store(userId, data) {
     return await models.Workout.create({
         name: data.name,
         is_private: data.is_private,
+        is_routine: data.is_routine || false,
         started_at: data.started_at,
         completed_at: data.completed_at,
         user_id: userId
     });
 }
 
+async function getRoutines(userId) {
+    const workouts = await models.Workout.findAll({
+        where: {
+            user_id: userId,
+            is_routine: true
+        },
+        include: [
+            {
+                model: models.Exercise,
+                as: 'Exercises',
+                include: [
+                    {
+                        model: models.Exo,
+                        as: 'Exo',
+                    },
+                    {
+                        model: models.Set,
+                        as: 'Sets',
+                    }
+                ]
+            }
+        ]
+    })
+
+    return workouts;
+}
+
 module.exports = {
     index,
     show,
     store,
+    getRoutines,
 };

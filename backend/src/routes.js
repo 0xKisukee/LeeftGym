@@ -27,27 +27,38 @@ router.get(
     authController.me,
 );
 
+// Workouts
+
 router.get(
     '/workouts',
     auth.authenticateJwt,
     workoutController.index,
-);
-router.get(
-    '/workouts/:id',
-    auth.authenticateJwt,
-    workoutController.show,
 );
 router.post(
     '/workouts',
     auth.authenticateJwt,
     workoutController.store,
 );
+router.get(
+    '/workouts/routines',
+    auth.authenticateJwt,
+    workoutController.getRoutines,
+);
+router.get(
+    '/workouts/:id',
+    auth.authenticateJwt,
+    workoutController.show,
+);
+
+// Exercises
 
 router.post(
     '/workouts/:id/exercises',
     auth.authenticateJwt,
     exerciseController.store,
 );
+
+// Exos
 
 router.get(
     '/exos',
