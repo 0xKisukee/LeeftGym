@@ -1,13 +1,10 @@
 import "../global.css";
 import {SafeAreaView, Text, View} from "react-native";
-import {Container} from "./ScreenContainer";
 
 export default function BetaBar() {
     return (
-        <View>
-            <View className="bg-primary">
-                <Text className="text-center my-4">APPLICATION EN BETA</Text>
-            </View>
+        <View className="bg-red-500">
+            <Text className="text-center my-2">APPLICATION EN BETA</Text>
         </View>
     )
 }

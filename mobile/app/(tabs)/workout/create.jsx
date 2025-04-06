@@ -2,7 +2,7 @@ import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList, ScrollView} f
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
 import {useEffect, useState} from "react";
-import {router} from "expo-router";
+import {router, useLocalSearchParams} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from "@react-navigation/native";
 import WorkoutTimer from "../../../components/timers/WorkoutTimer";
@@ -14,6 +14,7 @@ import {SubTitle, Title} from "../../../components/StyledText";
 import {ScreenContainerLight} from "../../../components/ScreenContainerLight";
 
 export default function Create() {
+    const { routineWorkout } = useLocalSearchParams();
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
 
     const emptyWorkout = {
@@ -29,7 +30,42 @@ export default function Create() {
     const [restTimer, setRestTimer] = useState(0);
     const [restTrigger, setRestTrigger] = useState(0);
 
-    // Retrieve workout data from AsyncStorage when the app starts
+    // Initialize workout data
+    useEffect(() => {
+        const initializeWorkout = async () => {
+            try {
+                if (routineWorkout) {
+                    
+                    // If routine workout is passed as params, use it
+                    const routineWorkoutData = JSON.parse(routineWorkout);
+                    const newWorkout = {
+                        ...routineWorkoutData,
+                        is_routine: false,
+                        started_at: new Date(),
+                        completed_at: null,
+                        Exercises: routineWorkoutData.Exercises.map(exercise => ({
+                            ...exercise,
+                            Sets: (exercise.Sets || []).map(set => ({
+                                ...set,
+                                completed: false
+                            }))
+                        }))
+                    };
+
+                    setCreatedWorkout(newWorkout);
+
+                    // Save workout data to AsyncStorage to avoid losing it on the next useEffect
+                    await AsyncStorage.setItem('workoutData', JSON.stringify(newWorkout));
+                }
+            } catch (e) {
+                console.error("Failed to initialize workout data", e);
+            }
+        };
+
+        initializeWorkout();
+    }, [routineWorkout]);
+
+    // Retrieve workout data from AsyncStorage on each screen focus
     useEffect(() => {
         const loadWorkoutData = async () => {
             try {
@@ -58,7 +94,6 @@ export default function Create() {
         };
 
         saveWorkoutData();
-
     }, [createdWorkout]);
 
     const confirmWorkout = async () => {

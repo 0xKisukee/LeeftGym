@@ -8,6 +8,7 @@ import {useIsFocused} from "@react-navigation/native";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {SubTitle, Title} from "../../../components/StyledText";
 import {getRoutines} from "../../../api/workouts";
+import RoutineBox from "../../../components/RoutineBox";
 
 export default function Index() {
     const [pendingWorkout, setPendingWorkout] = useState(false);
@@ -52,18 +53,22 @@ export default function Index() {
 
             {!pendingWorkout &&
                 <AppBtn
-                    title="Commencer l'entraînement"
+                    title="Commencer un entraînement vide"
                     handlePress={() => router.push("/workout/create")}
                 />
             }
 
-            <SubTitle className="mt-5">Routines (coming soon)</SubTitle>
+            <SubTitle className="mt-5">Vos Routines</SubTitle>
 
             <FlatList
                 data={routinesList}
-                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <SubTitle>- {item.name}</SubTitle>
+                    <RoutineBox
+                        workout={item}
+                        onMenuPress={() => {
+                            console.log("routine edit button pressed");
+                        }}
+                    />
                 )}
             >
 
