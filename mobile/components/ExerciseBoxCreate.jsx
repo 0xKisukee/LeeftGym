@@ -1,7 +1,7 @@
 import "../global.css";
-import {Container} from "./Container";
+import {Container} from "./ScreenContainer";
 import {FlatList, Text, TextInput, View} from "react-native";
-import getExoNameById from "../api/exercises";
+import {getExoNameById} from "../api/exercises";
 import {useEffect, useState} from "react";
 import AppBtn from "./AppBtn";
 import SetBoxCreate from "./SetBoxCreate";

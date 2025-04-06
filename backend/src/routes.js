@@ -50,6 +50,12 @@ router.post(
 );
 
 router.get(
+    '/exos',
+    auth.authenticateJwt,
+    exoController.index,
+);
+
+router.get(
     '/exos/:id',
     auth.authenticateJwt,
     exoController.show,

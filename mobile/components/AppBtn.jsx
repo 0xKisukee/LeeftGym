@@ -4,7 +4,7 @@ import {Text, TouchableOpacity} from "react-native";
 
 export default function AppBtn({title, handlePress}) {
     return (
-        <SafeAreaView className="bg-red-200 my-2 rounded-lg max-w-100 mx-5">
+        <SafeAreaView className="bg-primary py-3 px-6 rounded-lg my-2 max-w-100 mx-5">
             <TouchableOpacity
                 onPress={handlePress}>
 

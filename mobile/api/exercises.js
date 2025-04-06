@@ -1,9 +1,9 @@
-import {getValueFor} from "./jwt";
+import {getValueFor, save} from "./jwt";
 
 const API_URL_2 = 'https://gym.leeft.fun/api';
 const API_URL = 'http://localhost:3000/api';
 
-export default async function getExoNameById(exoId) {
+export async function getExoNameById(exoId) {
     try {
         const jwtToken = await getValueFor("userJWT");
 
@@ -25,4 +25,33 @@ export default async function getExoNameById(exoId) {
     } catch (error) {
         alert(error);
     }
+}
+
+export async function getAllExos() {
+    try {
+        const jwtToken = await getValueFor("userJWT");
+
+        const response = await fetch(
+            API_URL + '/exos',
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+            }
+        );
+
+        const json = await response.json();
+        return json;
+
+    } catch (error) {
+        alert(error);
+    }
+}
+
+module.exports = {
+    getAllExos,
+    getExoNameById
 }

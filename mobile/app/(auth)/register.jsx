@@ -1,5 +1,5 @@
 import {Text, TouchableOpacity, View} from "react-native";
-import {Container} from "../../components/Container";
+import {Container, ScreenContainer} from "../../components/ScreenContainer";
 import {router} from "expo-router";
 import BetaBar from "../../components/BetaBar";
 import AppBtn from "../../components/AppBtn";
@@ -7,6 +7,7 @@ import FormField from "../../components/FormField";
 import {useState} from "react";
 import register from "../../api/register"
 import {save, getValueFor} from "../../api/jwt";
+import {BodyText, Title} from "../../components/StyledText";
 
 export default function Register() {
     const [form, setForm] = useState({
@@ -34,18 +35,19 @@ export default function Register() {
     }
 
     return (
-        <Container>
-            <BetaBar/>
-            <Text className="mx-5">Pour commencer, veuillez vous inscrire :</Text>
+        <ScreenContainer>
+            <Title>Inscrivez-vous gratuitement :</Title>
 
             <FormField
-                title="addresse email"
+                title="Addresse email"
+                placeholder="Entrez votre adresse email"
                 value={form.email}
                 handleChangeText={(e) => setForm({...form, email: e})}
             />
 
             <FormField
-                title="mot de passe"
+                title="Mot de passe"
+                placeholder="Entrez votre mot de passe"
                 value={form.password}
                 handleChangeText={(e) => setForm({...form, password: e})}
             />
@@ -61,9 +63,9 @@ export default function Register() {
 
             <TouchableOpacity
                 onPress={() => router.replace("/login")}>
-                <Text>Vous avez deja un compte ?</Text>
+                <BodyText>Vous avez deja un compte ?</BodyText>
             </TouchableOpacity>
 
-        </Container>
+        </ScreenContainer>
     )
 }

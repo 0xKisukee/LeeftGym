@@ -5,15 +5,15 @@ module.exports = {
     await queryInterface.bulkInsert('exos', [
       {
         id: 1,
-        name: 'Dips',
-      },
-      {
-        id: 2,
         name: 'Pompes',
       },
       {
+        id: 2,
+        name: 'Tractions',
+      },
+      {
         id: 3,
-        name: 'Squat',
+        name: 'Développé couché',
       },
       {
         id: 4,
@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         id: 5,
-        name: 'Pull-ups',
+        name: 'Squat',
       }
     ], {});
 

@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getItem} from "expo-secure-store";
+import {useExos} from "../../../contexts/ExoContext";
 
 export default function ChooseExo() {
     const emptyWorkout = {
@@ -17,24 +18,7 @@ export default function ChooseExo() {
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
 
-    const allExos = [
-        {
-            "id": 1,
-            "name": "bench"
-        },
-        {
-            "id": 3,
-            "name": "curl biceps"
-        },
-        {
-            "id": 4,
-            "name": "pompes"
-        },
-        {
-            "id": 5,
-            "name": "dips"
-        },
-    ]
+    const allExos = useExos()
 
     // Load workout from AsyncStorage
     useEffect(() => {

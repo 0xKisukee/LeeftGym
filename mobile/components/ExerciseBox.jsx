@@ -1,7 +1,7 @@
 import "../global.css";
 import {FlatList, Text, TextInput, View} from "react-native";
 import SetBox from "./SetBox";
-import getExoNameById from "../api/exercises";
+import {getExoNameById} from "../api/exercises";
 import {useEffect, useState} from "react";
 
 export default function ExerciseBox({exercise}) {

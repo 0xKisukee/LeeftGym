@@ -1,5 +1,5 @@
 import {Text, TouchableOpacity, View} from "react-native";
-import {Container} from "../../components/Container";
+import {Container, ScreenContainer} from "../../components/ScreenContainer";
 import {router} from "expo-router";
 import BetaBar from "../../components/BetaBar";
 import AppBtn from "../../components/AppBtn";
@@ -7,6 +7,8 @@ import FormField from "../../components/FormField";
 import {useState} from "react";
 import login from "../../api/login"
 import {save} from "../../api/jwt";
+import {containers, typography} from "../../styles/theme";
+import {Title, BodyText} from "../../components/StyledText";
 
 export default function Login() {
     const [form, setForm] = useState({
@@ -14,7 +16,7 @@ export default function Login() {
         password: "",
     })
     const [message, setMessage] = useState("");
-    const [messageColor, setMessageColor] = useState("black");
+    const [messageColor, setMessageColor] = useState("red");
 
     const submitLogin = async (email, pwd) => {
         const result = await login(form.email, form.password);
@@ -34,18 +36,19 @@ export default function Login() {
     }
 
     return (
-        <Container>
-            <BetaBar/>
-            <Text className="mx-5">Connectez-vous :</Text>
+        <ScreenContainer>
+            <Title>Connectez-vous :</Title>
 
             <FormField
-                title="addresse email"
+                title="Addresse email"
+                placeholder="Entrez votre adresse email"
                 value={form.email}
                 handleChangeText={(e) => setForm({...form, email: e})}
             />
 
             <FormField
-                title="mot de passe"
+                title="Mot de passe"
+                placeholder="Entrez un mot de passe"
                 value={form.password}
                 handleChangeText={(e) => setForm({...form, password: e})}
             />
@@ -61,8 +64,8 @@ export default function Login() {
 
             <TouchableOpacity
                 onPress={() => router.replace("/register")}>
-                <Text>Pas de compte ?</Text>
+                <BodyText>Pas de compte ?</BodyText>
             </TouchableOpacity>
-        </Container>
+        </ScreenContainer>
     )
 }
