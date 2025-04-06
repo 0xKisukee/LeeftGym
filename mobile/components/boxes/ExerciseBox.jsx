@@ -4,9 +4,17 @@ import SetBox from "./SetBox";
 import {getExoNameById} from "../../api/exercises";
 import {useEffect, useState} from "react";
 import {BodyText, SubTitle} from "../StyledText";
+import {useExos} from "../../contexts/ExoContext";
 
 export default function ExerciseBox({exercise}) {
     const [exoName, setExoName] = useState("");
+
+    const allExos = useExos();
+
+    const getExoNameById = (exoId) => {
+        const exo = allExos.find(exo => exo.id === exoId);
+        return exo ? exo.name : "Chargement...";
+    };
 
     useEffect(() => {
         async function fetchExerciseName() {
