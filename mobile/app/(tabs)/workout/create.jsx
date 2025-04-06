@@ -9,6 +9,8 @@ import WorkoutTimer from "../../../components/WorkoutTimer";
 import ExerciseBoxCreate from "../../../components/ExerciseBoxCreate";
 import chooseExo from "./chooseExo";
 import RestTimer from "../../../components/RestTimer";
+import {ScreenContainer} from "../../../components/ScreenContainer";
+import {Title} from "../../../components/StyledText";
 
 export default function Create() {
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
@@ -154,11 +156,14 @@ export default function Create() {
     );
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <Text>Workout - Create</Text>
-            <WorkoutTimer
-                startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
-            />
+        <ScreenContainer>
+            <View className="flex-row justify-between mb-5">
+                <Title>Entraînement en cours</Title>
+                <WorkoutTimer
+                    startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
+                />
+            </View>
+
             <FlatList
                 data={createdWorkout.Exercises}
                 renderItem={renderExercise}
@@ -168,6 +173,6 @@ export default function Create() {
                 restDuration={restTimer}
                 trigger={restTrigger}
             />
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }

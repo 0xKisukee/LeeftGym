@@ -30,29 +30,31 @@ export default function SetBoxCreate({set, onSetChange, onSetCompleted}) {
 
     return (
         <View
-            className={`border-b border-gray-700 flex-row justify-around py-1 ${set.completed ? 'bg-green-300' : 'bg-gray-300'}`}
+            className={`border-b border-gray-700 flex-row justify-around py-2 ${set.completed ? 'bg-green-300' : 'bg-gray-300'}`}
         >
-            <Text>
+            <Text className="text-xl">
                 {order}
             </Text>
 
             <TextInput
+                className="text-xl"
                 value={String(weight)}
                 onChangeText={(text) => setWeight(text)}
                 keyboardType="numeric"
             />
 
             <TextInput
+                className="text-xl"
                 value={String(reps)}
                 onChangeText={(text) => setReps(text)}
                 keyboardType="numeric"
             />
 
             <TouchableOpacity
-                className={`w-6 h-6 rounded-lg ${set.completed ? 'bg-green-500' : 'bg-gray-500'}`}
+                className={`w-8 h-8 rounded-lg ${set.completed ? 'bg-green-500' : 'bg-gray-500'}`}
                 onPress={handleSetCompletion}
             >
-                <Text className="text-center text-white">
+                <Text className="text-xl text-center text-text">
                     {set.completed ? 'v' : 'x'}
                 </Text>
             </TouchableOpacity>

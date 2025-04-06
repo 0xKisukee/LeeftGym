@@ -34,6 +34,7 @@ export default function ChooseExo() {
         };
 
         loadWorkoutData();
+        console.log(allExos);
     }, []);
 
     // Function to add exercise
@@ -82,7 +83,6 @@ export default function ChooseExo() {
                 data={allExos}
                 renderItem={({ item }) => (exoBtn(item))}
             />
-
 
         </SafeAreaView>
     );

@@ -7,6 +7,8 @@ import WorkoutBox from "../../components/WorkoutBox";
 import getWorkouts from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import me from "../../api/me";
+import {SubTitle, Title} from "../../components/StyledText";
+import {ScreenContainer} from "../../components/ScreenContainer";
 
 export default function Profile() {
     const [userInfo, setUserInfo] = useState(null); // Add state to store user info
@@ -40,9 +42,9 @@ export default function Profile() {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <Text>Profile</Text>
-            <Text>Bonjour {userInfo.email}</Text>
+        <ScreenContainer>
+            <Title>Profile</Title>
+            <SubTitle>Bonjour {userInfo.email}</SubTitle>
             <AppBtn
                 title="Deconnexion"
                 handlePress={() => {
@@ -54,6 +56,6 @@ export default function Profile() {
                 renderItem={({item}) => <WorkoutBox workout={item}/>}
             />
 
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }

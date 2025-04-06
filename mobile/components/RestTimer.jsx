@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import {BodyText, Title} from "./StyledText";
 
 // Fonction pour formater le temps en HH:MM:SS
 function formatTime(seconds) {
@@ -66,23 +67,23 @@ export default function RestTimer({ restDuration = 120, trigger }) {
                 className="bg-red-500 p-2 rounded-lg"
                 onPress={() => adjustTime(-15)}
             >
-                <Text className="text-white">-15</Text>
+                <BodyText>-15</BodyText>
             </TouchableOpacity>
 
-            <Text className="text-2xl font-bold">{formatTime(endTimestamp - currentTimestamp)}</Text>
+            <Title>{formatTime(endTimestamp - currentTimestamp)}</Title>
 
             <TouchableOpacity 
                 className="bg-green-500 p-2 rounded-lg"
                 onPress={() => adjustTime(15)}
             >
-                <Text className="text-white">+15</Text>
+                <BodyText>+15</BodyText>
             </TouchableOpacity>
 
             <TouchableOpacity 
                 className="bg-green-500 p-2 rounded-lg"
                 onPress={skipRest}
             >
-                <Text className="text-white">Passer</Text>
+                <BodyText>Passer</BodyText>
             </TouchableOpacity>
         </View>
     );

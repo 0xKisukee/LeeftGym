@@ -6,6 +6,8 @@ import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import pushWorkout from "../../../api/pushWorkout";
 import {useIsFocused} from "@react-navigation/native";
+import {ScreenContainer} from "../../../components/ScreenContainer";
+import {BodyText, Title} from "../../../components/StyledText";
 
 export default function Create() {
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
@@ -60,10 +62,11 @@ export default function Create() {
 
 
     return (
-        <SafeAreaView>
-            <Text>Workout - Confirm</Text>
+        <ScreenContainer>
+            <Title>Workout - Confirm</Title>
             <FormField
                 title="Donnez un nom a votre seance"
+                placeholder="Séance dos du jeudi"
                 value={createdWorkout.name}
                 handleChangeText={(e) => setCreatedWorkout({...createdWorkout, name: e})}
             />
@@ -74,6 +77,6 @@ export default function Create() {
                 }}
             />
 
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }

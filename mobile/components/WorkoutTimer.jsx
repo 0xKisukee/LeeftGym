@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Text } from "react-native";
 import {useIsFocused} from "@react-navigation/native";
+import {BodyText, Title} from "./StyledText";
 
 // Fonction pour formater le temps en HH:MM:SS
 function formatTime(seconds) {
@@ -27,5 +28,5 @@ export default function WorkoutTimer({ startTimestamp }) {
         return () => clearInterval(interval);
     }, [isFocused]);
 
-    return <Text className="text-2xl font-bold">{formatTime(currentTimestamp - startTimestamp)}</Text>;
+    return <Title>{formatTime(currentTimestamp - startTimestamp)}</Title>;
 }

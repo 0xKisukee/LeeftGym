@@ -5,6 +5,8 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused} from "@react-navigation/native";
+import {ScreenContainer} from "../../../components/ScreenContainer";
+import {Title} from "../../../components/StyledText";
 
 export default function Index() {
     const [pendingWorkout, setPendingWorkout] = useState(false);
@@ -29,22 +31,22 @@ export default function Index() {
     }, [isFocused]);
 
     return (
-        <SafeAreaView>
-            <Text>Workout - Index</Text>
+        <ScreenContainer>
+            <Title>Workout - Commencer</Title>
 
             {pendingWorkout &&
                 <AppBtn
-                    title="Reprendre votre entrainement"
+                    title="Reprendre votre entraînement"
                     handlePress={() => router.push("/workout/create")}
                 />
             }
 
             {!pendingWorkout &&
                 <AppBtn
-                    title="Commencer un entrainement"
+                    title="Commencer l'entraînement"
                     handlePress={() => router.push("/workout/create")}
                 />
             }
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }

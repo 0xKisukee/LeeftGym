@@ -3,6 +3,7 @@ import {FlatList, Text, TextInput, View} from "react-native";
 import SetBox from "./SetBox";
 import {getExoNameById} from "../api/exercises";
 import {useEffect, useState} from "react";
+import {BodyText, SubTitle} from "./StyledText";
 
 export default function ExerciseBox({exercise}) {
     const [exoName, setExoName] = useState("");
@@ -17,15 +18,15 @@ export default function ExerciseBox({exercise}) {
     }, []);
 
     return (
-        <View className="mx-1 my-1 border-2 border-gray-400">
-            <Text className="text-xl">{exoName}</Text>
+        <View className="my-1 py-4 border-b border-secondary">
+            <SubTitle className="mx-5 mb-2">{exoName}</SubTitle>
 
             <View
                 style={{flexDirection: "row", justifyContent: "space-around"}}
             >
-                <Text>Série</Text>
-                <Text>Kg</Text>
-                <Text>Reps</Text>
+                <BodyText>Série</BodyText>
+                <BodyText>Kg</BodyText>
+                <BodyText>Reps</BodyText>
             </View>
 
             {exercise.Sets.length > 0 &&

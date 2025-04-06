@@ -5,6 +5,8 @@ import {useEffect, useState} from "react";
 import {createWorkout} from "../../../api/workouts";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ScreenContainer} from "../../../components/ScreenContainer";
+import {SubTitle, Title} from "../../../components/StyledText";
 
 export default function Create() {
     const emptyWorkout = {
@@ -19,9 +21,9 @@ export default function Create() {
 
 
     return (
-        <SafeAreaView>
-            <Text>Workout - Congrats</Text>
-            <Text>Felicitations, votre entraînement a été enregistré</Text>
+        <ScreenContainer>
+            <Title>Workout - Congrats</Title>
+            <SubTitle>Felicitations, votre entraînement a été enregistré</SubTitle>
 
             <AppBtn
                 title="Retourner au profil"
@@ -32,6 +34,6 @@ export default function Create() {
                     router.replace("/profile");
                 }}
             />
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }

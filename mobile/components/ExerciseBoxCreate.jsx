@@ -5,6 +5,7 @@ import {getExoNameById} from "../api/exercises";
 import {useEffect, useState} from "react";
 import AppBtn from "./AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
+import {SubTitle, Title} from "./StyledText";
 
 export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
     const [exoName, setExoName] = useState("");
@@ -31,20 +32,21 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
     };
 
     return (
-        <View className="mx-3 my-3 border-2 border-blue-500">
-            <Text className="mx-5 text-xl">{exoName}</Text>
+        <View className="my-3 pb-5 border-b border-primary">
+            <Title className="mx-5 my-2">{exoName}</Title>
             <TextInput
-                className="mx-3 my-2"
+                className="text-text h-12 px-2 my-1 w-full bg-bgsec rounded-lg"
                 placeholder="Plus tard vous pourrez ajouter des notes ici"
+                placeholderTextColor="#a8a8a8"
             />
 
             <View
                 className="flex-row justify-around border-b-2 border-gray-700 py-2"
             >
-                <Text className="text-xl">Série</Text>
-                <Text className="text-xl">Kg</Text>
-                <Text className="text-xl">Reps</Text>
-                <Text className="text-xl">Completed</Text>
+                <SubTitle>Série</SubTitle>
+                <SubTitle>Kg</SubTitle>
+                <SubTitle>Reps</SubTitle>
+                <SubTitle>Completed</SubTitle>
             </View>
 
             {exercise.Sets.length > 0 &&
