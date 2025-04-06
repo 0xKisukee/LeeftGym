@@ -1,13 +1,13 @@
 import {getValueFor} from "./jwt";
 import getExoNameById from "./exercises";
 
-const API_URL2 = 'https://gym.leeft.fun/api';
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://gym.leeft.fun/api';
+const API_URL2 = 'http://localhost:3000/api';
 
 export default async function pushWorkout(workout) {
     try {
-        const jwtToken = await getValueFor("userJWT");
         console.log("Pushing this workout to db:", workout);
+        const jwtToken = await getValueFor("userJWT");
 
         // Push Workout
         const workoutResponse = await fetch(
@@ -22,6 +22,7 @@ export default async function pushWorkout(workout) {
                 body: JSON.stringify({
                     name: workout.name,
                     is_private: workout.is_private,
+                    is_routine: workout.is_routine || false,
                     started_at: workout.started_at,
                 }),
             }

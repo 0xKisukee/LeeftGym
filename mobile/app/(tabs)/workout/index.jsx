@@ -57,7 +57,7 @@ export default function Index() {
                 />
             }
 
-            <SubTitle className="mt-5">Routines</SubTitle>
+            <SubTitle className="mt-5">Routines (coming soon)</SubTitle>
 
             <FlatList
                 data={routinesList}

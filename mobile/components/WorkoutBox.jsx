@@ -3,7 +3,7 @@ import {FlatList, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ExerciseBox from "./ExerciseBox";
 import {BodyText, SubTitle, Title} from "./StyledText";
 
-export default function WorkoutBox({workout}) {
+export default function WorkoutBox({workout, onMenuPress}) {
     return (
         <View className="my-3 rounded-lg bg-bgsec">
 
@@ -11,7 +11,10 @@ export default function WorkoutBox({workout}) {
 
                 <SubTitle className="mx-5 my-3">{workout.name}</SubTitle>
 
-                <TouchableOpacity className="mr-5 mt-1">
+                <TouchableOpacity 
+                    className="mr-5 mt-1"
+                    onPress={onMenuPress}
+                >
                     <Title>
                         ...
                     </Title>
