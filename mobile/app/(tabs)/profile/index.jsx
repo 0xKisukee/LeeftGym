@@ -3,7 +3,7 @@ import AppBtn from "../../../components/AppBtn";
 import {forget, getValueFor} from "../../../api/jwt";
 import {router} from "expo-router";
 import {useEffect, useState} from "react";
-import WorkoutBox from "../../../components/WorkoutBox";
+import WorkoutBox from "../../../components/boxes/WorkoutBox";
 import {getWorkouts} from "../../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import me from "../../../api/me";

@@ -1,7 +1,7 @@
-import "../global.css";
+import "../../global.css";
 import {FlatList, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ExerciseBox from "./ExerciseBox";
-import {BodyText, SubTitle, Title} from "./StyledText";
+import {BodyText, SubTitle, Title} from "../StyledText";
 
 export default function WorkoutBox({workout, onMenuPress}) {
     return (

@@ -1,6 +1,6 @@
-import "../global.css";
+import "../../global.css";
 import {Text, TextInput, View} from "react-native";
-import {BodyText} from "./StyledText";
+import {BodyText} from "../StyledText";
 
 export default function SetBox({set}) {
     return (

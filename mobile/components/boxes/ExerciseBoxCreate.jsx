@@ -1,11 +1,11 @@
-import "../global.css";
-import {Container} from "./ScreenContainer";
+import "../../global.css";
+import {Container} from "../ScreenContainer";
 import {FlatList, Text, TextInput, View} from "react-native";
-import {getExoNameById} from "../api/exercises";
+import {getExoNameById} from "../../api/exercises";
 import {useEffect, useState} from "react";
-import AppBtn from "./AppBtn";
+import AppBtn from "../AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
-import {SubTitle, Title} from "./StyledText";
+import {SubTitle, Title} from "../StyledText";
 
 export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
     const [exoName, setExoName] = useState("");

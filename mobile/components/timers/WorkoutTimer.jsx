@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Text } from "react-native";
 import {useIsFocused} from "@react-navigation/native";
-import {BodyText, Title} from "./StyledText";
+import {BodyText, Title} from "../StyledText";
 
 // Fonction pour formater le temps en HH:MM:SS
 function formatTime(seconds) {
