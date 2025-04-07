@@ -70,6 +70,7 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
             }
 
             <AppBtn
+                className="mx-5"
                 title="Ajouter une série"
                 handlePress={onAddSet}
             />

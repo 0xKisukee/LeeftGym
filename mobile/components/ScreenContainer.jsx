@@ -6,7 +6,7 @@ export const ScreenContainer = (props) => {
     return (
         <SafeAreaView className="flex-1 bg-background" edges={['top', 'left', 'right', 'bottom']}>
             <BetaBar/>
-            <View className="flex-1 px-4 py-6">
+            <View className="flex-1 px-4">
                 {props.children}
             </View>
         </SafeAreaView>

@@ -138,6 +138,7 @@ export default function Profile() {
                     <BottomSheetView>
 
                         <AppBtn
+                            className="mx-5"
                             title="Enregistrer la routine"
                             handlePress={() => {
                                 copyAsRoutine()

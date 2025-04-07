@@ -249,7 +249,7 @@ export default function Create() {
 
     // Boutons à afficher en bas de la liste
     const renderFooter = () => (
-        <View>
+        <View className="px-5">
             <AppBtn
                 title="Ajouter un exercice"
                 handlePress={() => handleSnapPress(1)} // Example exercise ID
@@ -303,7 +303,9 @@ export default function Create() {
 
 
                 <BottomSheet
-                    backgroundStyle={{backgroundColor: "#232323"}}
+                    backgroundStyle={{
+                        backgroundColor: "#232323",
+                    }}
                     ref={sheetRef}
                     index={-1}
                     snapPoints={snapPoints}
@@ -311,12 +313,12 @@ export default function Create() {
                     backdropComponent={renderBackdrop}
                     enablePanDownToClose={true}
                 >
-                    <BottomSheetView>
+                    <BottomSheetView className="px-4">
 
                         <Title className="mb-3">Workout - Choose Exo</Title>
                         <BodyText className="mb-2">Choisissez un exercice à ajouter à votre workout</BodyText>
                         <TextInput
-                            className="text-text h-12 px-2 my-1 w-full bg-bgsec rounded-lg"
+                            className="h-12 px-2 my-1 w-full bg-tertiary rounded-lg"
                             placeholder="Recherchez un exercice (fonctionnalité à venir)"
                             placeholderTextColor="#a8a8a8"
                         />

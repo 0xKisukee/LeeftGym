@@ -44,7 +44,7 @@ export default function RoutineBox({workout, onMenuPress}) {
 
             <AppBtn
                 title="Commencer la routine"
-                className="mb-6"
+                className="mb-6 mx-5"
                 handlePress={() => {
                     router.push({
                         pathname: "/workout/create",
