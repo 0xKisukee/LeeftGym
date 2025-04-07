@@ -1,20 +1,23 @@
-import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList, ScrollView} from "react-native";
+import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList, ScrollView, ActivityIndicator} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {router, useLocalSearchParams} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from "@react-navigation/native";
 import WorkoutTimer from "../../../components/timers/WorkoutTimer";
 import ExerciseBoxCreate from "../../../components/boxes/ExerciseBoxCreate";
-import chooseExo from "./chooseExo";
 import RestTimer from "../../../components/timers/RestTimer";
 import {ScreenContainer} from "../../../components/ScreenContainer";
-import {SubTitle, Title} from "../../../components/StyledText";
+import {BodyText, SubTitle, Title} from "../../../components/StyledText";
 import {ScreenContainerLight} from "../../../components/ScreenContainerLight";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
+import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
+import {useExos} from "../../../contexts/ExoContext";
 
 export default function Create() {
     const { routineWorkout } = useLocalSearchParams();
+    const { allExos, isLoading, error } = useExos();
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
 
     const emptyWorkout = {
@@ -29,6 +32,36 @@ export default function Create() {
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
     const [restTimer, setRestTimer] = useState(0);
     const [restTrigger, setRestTrigger] = useState(0);
+
+
+
+    // Bottom sheet
+    const sheetRef = useRef(null);
+    const snapPoints = useMemo(() => ["50%", "90%"], []);
+
+    // Bottom sheet callbacks
+    const handleClosePress = useCallback(() => {
+        sheetRef.current?.close();
+    }, []);
+    const handleSnapPress = useCallback((index) => {
+        sheetRef.current?.snapToIndex(index);
+    }, []);
+
+    // Render backdrop component
+    const renderBackdrop = useCallback(
+        (props) => (
+            <BottomSheetBackdrop
+                {...props}
+                disappearsOnIndex={-1}
+                appearsOnIndex={0}
+                pressBehavior="close"
+            />
+        ),
+        []
+    );
+
+
+
 
     // Initialize workout data
     useEffect(() => {
@@ -102,8 +135,10 @@ export default function Create() {
             exercise => exercise.Sets.length === 0
         );
 
-        if (hasEmptyExercises) {
-            alert("Vous ne pouvez pas creer d'exercices vides.");
+        const noExercise = createdWorkout.Exercises.length === 0;
+
+        if (hasEmptyExercises || noExercise) {
+            alert("Veuillez compléter vos exercises.");
             return;
         }
 
@@ -152,6 +187,45 @@ export default function Create() {
         setCreatedWorkout(updatedWorkout);
     };
 
+
+
+    // Function to add exercise
+    const addExercise = async (exoId) => {
+        const defaultOrder = createdWorkout.Exercises.length + 1;
+
+        const newExercise = {
+            order: defaultOrder,
+            rest_time: 180,
+            exo_id: exoId,
+            Sets: [],
+        };
+
+        const updatedWorkout = {
+            ...createdWorkout,
+            Exercises: [...createdWorkout.Exercises, newExercise],
+        };
+
+        setCreatedWorkout(updatedWorkout);
+
+        try {
+            await AsyncStorage.setItem('workoutData', JSON.stringify(updatedWorkout));
+            console.log("Exercise added to workout!");
+        } catch (e) {
+            console.error("Failed to save workout data", e);
+        }
+    };
+
+    const exoBtn = (exo) =>
+        <AppBtn
+            title={exo.name}
+            handlePress={() => {
+                addExercise(exo.id);
+                handleClosePress();
+            }}
+        />
+
+
+
     const renderExercise = ({ item }) => (
         <ExerciseBoxCreate
             exercise={item}
@@ -178,7 +252,7 @@ export default function Create() {
         <View>
             <AppBtn
                 title="Ajouter un exercice"
-                handlePress={() => router.push("/workout/chooseExo")} // Example exercise ID
+                handlePress={() => handleSnapPress(1)} // Example exercise ID
             />
             <AppBtn
                 title="Terminer la séance"
@@ -191,24 +265,79 @@ export default function Create() {
         </View>
     );
 
-    return (
-        <ScreenContainerLight>
-            <View className="flex-row justify-between px-4 py-6 bg-bgsec">
-                <Title>Entraînement en cours</Title>
-                <WorkoutTimer
-                    startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
-                />
-            </View>
 
-            <FlatList
-                data={createdWorkout.Exercises}
-                renderItem={renderExercise}
-                ListFooterComponent={renderFooter}
-            />
-            <RestTimer
-                restDuration={restTimer}
-                trigger={restTrigger}
-            />
-        </ScreenContainerLight>
+
+
+
+    if (error) {
+        return (
+            <ScreenContainer>
+                <Title>Error</Title>
+                <BodyText>Failed to load exercises: {error}</BodyText>
+            </ScreenContainer>
+        );
+    }
+
+
+
+    return (
+        <GestureHandlerRootView>
+            <ScreenContainerLight>
+                <View className="flex-row justify-between px-4 py-6 bg-bgsec">
+                    <Title>Entraînement en cours</Title>
+                    <WorkoutTimer
+                        startTimestamp={Math.floor(new Date(createdWorkout.started_at).getTime() / 1000)}
+                    />
+                </View>
+
+                <FlatList
+                    data={createdWorkout.Exercises}
+                    renderItem={renderExercise}
+                    ListFooterComponent={renderFooter}
+                />
+                <RestTimer
+                    restDuration={restTimer}
+                    trigger={restTrigger}
+                />
+
+
+
+                <BottomSheet
+                    backgroundStyle={{backgroundColor: "#232323"}}
+                    ref={sheetRef}
+                    index={-1}
+                    snapPoints={snapPoints}
+                    enableDynamicSizing={false}
+                    backdropComponent={renderBackdrop}
+                    enablePanDownToClose={true}
+                >
+                    <BottomSheetView>
+
+                        <Title className="mb-3">Workout - Choose Exo</Title>
+                        <BodyText className="mb-2">Choisissez un exercice à ajouter à votre workout</BodyText>
+                        <TextInput
+                            className="text-text h-12 px-2 my-1 w-full bg-bgsec rounded-lg"
+                            placeholder="Recherchez un exercice (fonctionnalité à venir)"
+                            placeholderTextColor="#a8a8a8"
+                        />
+
+                        {isLoading ? (
+                            <View className="flex-1 justify-center items-center">
+                                <ActivityIndicator size="large" color="#0000ff" />
+                            </View>
+                        ) : (
+                            <FlatList
+                                data={allExos}
+                                renderItem={({ item }) => (exoBtn(item))}
+                            />
+                        )}
+
+                    </BottomSheetView>
+                </BottomSheet>
+
+
+
+            </ScreenContainerLight>
+        </GestureHandlerRootView>
     );
 }
