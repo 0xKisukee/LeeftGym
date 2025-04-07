@@ -5,8 +5,6 @@ const API_URL2 = 'http://localhost:3000/api';
 
 export async function getAllExos() {
     try {
-        const jwtToken = await getValueFor("userJWT");
-
         const response = await fetch(
             API_URL + '/exos',
             {
@@ -14,7 +12,6 @@ export async function getAllExos() {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwtToken}`
                 },
             }
         );

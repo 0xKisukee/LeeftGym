@@ -7,7 +7,7 @@ const workoutController = require('./controllers/workout.controller');
 const exerciseController = require('./controllers/exercise.controller');
 const setController = require('./controllers/set.controller');
 
-// Public routes
+// Auth routes
 
 router.post(
     '/register',
@@ -18,8 +18,6 @@ router.post(
     '/login',
     authController.login,
 );
-
-// Auth routes
 
 router.get(
     '/me',
@@ -62,7 +60,6 @@ router.post(
 
 router.get(
     '/exos',
-    auth.authenticateJwt,
     exoController.index,
 );
 
