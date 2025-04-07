@@ -1,23 +1,27 @@
 import "../../global.css";
 import {Container} from "../ScreenContainer";
-import {FlatList, Text, TextInput, View} from "react-native";
-import {getExoNameById} from "../../api/exercises";
+import {FlatList, Text, TextInput, View, ActivityIndicator} from "react-native";
 import {useEffect, useState} from "react";
 import AppBtn from "../AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
 import {SubTitle, Title} from "../StyledText";
+import {useExos} from "../../contexts/ExoContext";
 
 export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
     const [exoName, setExoName] = useState("");
+    const { allExos, isLoading } = useExos();
+
+    const getExoNameById = (exoId) => {
+        const exo = allExos.find(exo => exo.id === exoId);
+        return exo ? exo.name : "Chargement...";
+    };
 
     useEffect(() => {
-        async function fetchExerciseName() {
-            const name = await getExoNameById(exercise.exo_id);
+        if (!isLoading) {
+            const name = getExoNameById(exercise.exo_id);
             setExoName(name);
         }
-
-        fetchExerciseName();
-    }, []);
+    }, [isLoading, allExos, exercise.exo_id]);
 
     const handleSetChange = (updatedSet) => {
         if (onSetChange) {
@@ -33,7 +37,10 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
 
     return (
         <View className="my-3 pb-5 border-b border-primary">
-            <Title className="mx-5 my-2">{exoName}</Title>
+            <View className="flex-row items-center">
+                <Title className="mx-5 my-2">{exoName}</Title>
+                {isLoading && <ActivityIndicator size="small" color="#0000ff" />}
+            </View>
             <TextInput
                 className="text-text h-12 px-2 my-1 w-full bg-bgsec rounded-lg"
                 placeholder="Plus tard vous pourrez ajouter des notes ici"

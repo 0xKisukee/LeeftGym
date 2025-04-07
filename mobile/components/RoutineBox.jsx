@@ -7,7 +7,7 @@ import {router} from "expo-router";
 import {useExos} from "../contexts/ExoContext";
 
 export default function RoutineBox({workout, onMenuPress}) {
-    const allExos = useExos();
+    const {allExos} = useExos();
 
     const getExoNameById = (exoId) => {
         const exo = allExos.find(exo => exo.id === exoId);

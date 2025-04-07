@@ -1,9 +1,8 @@
-import {Text, View, SafeAreaView, TextInput, FlatList} from "react-native";
+import {Text, View, SafeAreaView, TextInput, FlatList, ActivityIndicator} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getItem} from "expo-secure-store";
 import {useExos} from "../../../contexts/ExoContext";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {BodyText, SubTitle, Title} from "../../../components/StyledText";
@@ -19,8 +18,7 @@ export default function ChooseExo() {
     };
 
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
-
-    const allExos = useExos()
+    const { allExos, isLoading, error } = useExos();
 
     // Load workout from AsyncStorage
     useEffect(() => {
@@ -66,11 +64,21 @@ export default function ChooseExo() {
             console.error("Failed to save workout data", e);
         }
     };
+
     const exoBtn = (exo) =>
         <AppBtn
             title={exo.name}
             handlePress={() => addExercise(exo.id)}
         />
+
+    if (error) {
+        return (
+            <ScreenContainer>
+                <Title>Error</Title>
+                <BodyText>Failed to load exercises: {error}</BodyText>
+            </ScreenContainer>
+        );
+    }
 
     return (
         <ScreenContainer>
@@ -82,11 +90,16 @@ export default function ChooseExo() {
                 placeholderTextColor="#a8a8a8"
             />
 
-            <FlatList
-                data={allExos}
-                renderItem={({ item }) => (exoBtn(item))}
-            />
-
+            {isLoading ? (
+                <View className="flex-1 justify-center items-center">
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            ) : (
+                <FlatList
+                    data={allExos}
+                    renderItem={({ item }) => (exoBtn(item))}
+                />
+            )}
         </ScreenContainer>
     );
 }
