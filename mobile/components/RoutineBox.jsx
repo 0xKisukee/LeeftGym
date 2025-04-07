@@ -14,6 +14,9 @@ export default function RoutineBox({workout, onMenuPress}) {
         return exo ? exo.name : "Chargement...";
     };
 
+    // Trier les exercices par ordre
+    const sortedExercises = [...workout.Exercises].sort((a, b) => a.order - b.order);
+
     return (
         <View className="my-3 rounded-lg bg-bgsec">
 
@@ -34,7 +37,7 @@ export default function RoutineBox({workout, onMenuPress}) {
 
             <FlatList
                 className="border-b border-secondary mb-4 pb-4"
-                data={workout.Exercises}
+                data={sortedExercises}
                 renderItem={({item}) => (
                     <BodyText className="ml-2">
                         {getExoNameById(item.exo_id)}

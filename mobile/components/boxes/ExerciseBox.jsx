@@ -21,6 +21,11 @@ export default function ExerciseBox({exercise}) {
         }
     }, [isLoading, allExos]);
 
+    // Trier les sets par ordre
+    const sortedSets = [...exercise.Sets]
+        .filter(set => set.completed)
+        .sort((a, b) => a.order - b.order);
+
     return (
         <View className="my-1 py-4 border-b border-secondary">
             <View className="flex-row items-center">
@@ -38,7 +43,7 @@ export default function ExerciseBox({exercise}) {
 
             {exercise.Sets.length > 0 &&
                 <FlatList
-                    data={exercise.Sets.filter(set => set.completed)}
+                    data={sortedSets}
                     renderItem={({item}) => <SetBox set={item}/>}
                 />
             }

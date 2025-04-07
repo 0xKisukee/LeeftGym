@@ -4,6 +4,9 @@ import ExerciseBox from "./ExerciseBox";
 import {BodyText, SubTitle, Title} from "../StyledText";
 
 export default function WorkoutBox({workout, onMenuPress}) {
+    // Trier les exercices par ordre
+    const sortedExercises = [...workout.Exercises].sort((a, b) => a.order - b.order);
+
     return (
         <View className="my-3 rounded-lg bg-bgsec">
 
@@ -23,7 +26,7 @@ export default function WorkoutBox({workout, onMenuPress}) {
             </View>
 
             <FlatList
-                data={workout.Exercises}
+                data={sortedExercises}
                 renderItem={({item}) => <ExerciseBox exercise={item}/>}
             />
 
