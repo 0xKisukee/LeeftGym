@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.leeft",
+      "bundleIdentifier": "com.aitbenali.leeft",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -42,9 +42,6 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "b5a83a89-980f-4379-9c71-3908d800ac34"
       }
     }
   }
