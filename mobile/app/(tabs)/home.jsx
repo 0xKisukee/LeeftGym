@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <ScreenContainer>
             <View className="flex-1">
-                <Title className="mb-4">Fil d'actualité</Title>
+                <Title className="mb-4 mt-8">Fil d'actualité</Title>
                 <WorkoutFeed />
             </View>
         </ScreenContainer>

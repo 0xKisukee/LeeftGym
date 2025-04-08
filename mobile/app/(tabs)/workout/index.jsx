@@ -36,14 +36,13 @@ export default function Index() {
 
     // Retrieve workout data from AsyncStorage when the app starts
     useEffect(() => {
-        console.log("useeffect");
         loadWorkoutData();
         fetchRoutines();
     }, [isFocused]);
 
     return (
         <ScreenContainer>
-            <Title>Workout</Title>
+            <Title className="mb-4 mt-8">Workout</Title>
 
             {pendingWorkout &&
                 <AppBtn

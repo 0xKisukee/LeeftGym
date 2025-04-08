@@ -103,7 +103,7 @@ export default function Profile() {
     return (
         <GestureHandlerRootView>
             <ScreenContainer>
-                <Title>Profile</Title>
+                <Title className="mb-1 mt-4">Profile</Title>
                 <SubTitle>Bonjour {userInfo.email}</SubTitle>
                 <AppBtn
                     title="Deconnexion"
