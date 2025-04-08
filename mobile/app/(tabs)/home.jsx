@@ -1,11 +1,15 @@
-import {Text, View, StyleSheet, SafeAreaView} from "react-native";
-import {ScreenContainer} from "../../components/ScreenContainer";
-import {Title} from "../../components/StyledText";
+import { View } from "react-native";
+import { ScreenContainer } from "../../components/ScreenContainer";
+import { Title } from "../../components/StyledText";
+import { WorkoutFeed } from "../../components/WorkoutFeed";
+
 export default function Home() {
-// this will become a file route as well
     return (
         <ScreenContainer>
-            <Title>Home</Title>
+            <View className="flex-1">
+                <Title className="mb-4">Fil d'actualité</Title>
+                <WorkoutFeed />
+            </View>
         </ScreenContainer>
     );
 }

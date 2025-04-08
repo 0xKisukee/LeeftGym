@@ -1,6 +1,11 @@
 const catchAsync = require('../utils/catchAsync.js');
 const workoutService = require('../services/workout.service.js');
 
+const getAll = catchAsync(async (req, res) => {
+    const result = await workoutService.getAll();
+    res.status(254).json(result);
+});
+
 const index = catchAsync(async (req, res) => {
     const result = await workoutService.index(req.auth.userId);
     res.status(254).json(result);
@@ -26,4 +31,5 @@ module.exports = {
     show,
     store,
     getRoutines,
+    getAll,
 };

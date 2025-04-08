@@ -1,6 +1,40 @@
 const {AppError} = require('../utils/appError');
 const models = require('../../database/models');
 
+// This getAll function doesnt return routines
+async function getAll() {
+    return await models.Workout.findAll({
+        where: {
+            is_routine: false
+        },
+        include: [
+            {
+                model: models.User,
+                as: 'User',
+                attributes: {
+                    exclude: ['password'],
+                }
+            },
+            {
+                model: models.Exercise,
+                as: 'Exercises',
+                include: [
+                    {
+                        model: models.Exo,
+                        as: 'Exo',
+                    },
+                    {
+                        model: models.Set,
+                        as: 'Sets',
+                    }
+                ]
+            }
+        ],
+        order: [['createdAt', 'DESC']],
+        limit: 20,
+    })
+}
+
 async function index(userId) {
     return await models.Workout.findAll({
         where: {
@@ -101,4 +135,5 @@ module.exports = {
     show,
     store,
     getRoutines,
+    getAll,
 };

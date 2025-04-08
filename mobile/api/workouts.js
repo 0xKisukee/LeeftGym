@@ -50,3 +50,28 @@ export async function getRoutines() {
         alert(error);
     }
 }
+
+export async function getAll() {
+    try {
+        const jwtToken = await getValueFor("userJWT");
+
+        const response = await fetch(
+            API_URL + '/workouts/getAll',
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+            }
+        );
+        if (!response.ok) {
+            throw new Error('Failed to fetch workouts');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching workouts:', error);
+        throw error;
+    }
+}

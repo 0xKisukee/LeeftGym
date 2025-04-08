@@ -28,6 +28,11 @@ router.get(
 // Workouts
 
 router.get(
+    '/workouts/getAll',
+    auth.authenticateJwt,
+    workoutController.getAll,
+);
+router.get(
     '/workouts',
     auth.authenticateJwt,
     workoutController.index,

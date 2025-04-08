@@ -79,7 +79,7 @@ export default async function pushWorkout(workout) {
                             'Authorization': `Bearer ${jwtToken}`
                         },
                         body: JSON.stringify({
-                            order: set.name,
+                            order: set.order,
                             weight: set.weight,
                             reps: set.reps,
                             completed: set.completed,
