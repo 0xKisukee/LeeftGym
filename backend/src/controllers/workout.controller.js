@@ -26,10 +26,17 @@ const getRoutines = catchAsync(async (req, res) => {
     res.status(254).json(result);
 });
 
+
+const like = catchAsync(async (req, res) => {
+    const result = await workoutService.like(req.auth.userId, req.params.id);
+    res.status(254).json(result);
+});
+
 module.exports = {
     index,
     show,
     store,
     getRoutines,
     getAll,
+    like,
 };

@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('workouts', [
       {
         id: 1,
-        name: 'Entraînement Poitrine',
+        name: 'Entraînement PUSH',
         is_private: false,
         started_at: "2025-04-05 23:57:33.034+02",
         completed_at: null,

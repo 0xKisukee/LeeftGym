@@ -15,8 +15,14 @@ const me = catchAsync(async (req, res) => {
     res.status(254).json(req.auth);
 });
 
+const likes = catchAsync(async (req, res) => {
+    const result = await authService.getLikedWorkouts(req.auth.userId);
+    res.status(254).json(result);
+});
+
 module.exports = {
     register,
     login,
     me,
+    likes,
 };

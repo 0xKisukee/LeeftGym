@@ -1,6 +1,5 @@
 'use strict';
 
-const {DataTypes} = require("sequelize");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -16,17 +15,17 @@ module.exports = {
         allowNull: false,
       },
       weight: {
-        type: DataTypes.DECIMAL,
+        type: Sequelize.DECIMAL,
         allowNull: false, //  change to true for non-weighted exercises
         defaultValue: 0,
       },
       reps: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },
       completed: {
-        type: DataTypes.BOOLEAN,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },

@@ -54,6 +54,12 @@ async function index(userId) {
                         as: 'Sets',
                     }
                 ]
+            },
+            {
+                model: models.User,
+                as: 'LikedByUsers',
+                attributes: ['id', 'email'],
+                through: { attributes: [] }
             }
         ],
         order: [['createdAt', 'DESC']]
@@ -130,10 +136,26 @@ async function getRoutines(userId) {
     return workouts;
 }
 
+async function like(userId, workoutId) {
+    const user = await models.User.findByPk(userId);
+    if (!user) {
+        throw new Error(`User with ID ${userId} not found.`);
+    }
+    const workout = await models.Workout.findByPk(workoutId);
+    if (!workout) {
+        throw new Error(`Workout with ID ${workoutId} not found.`);
+    }
+
+    await user.addLikedWorkout(workout);
+    return workout;
+
+}
+
 module.exports = {
     index,
     show,
     store,
     getRoutines,
     getAll,
+    like,
 };

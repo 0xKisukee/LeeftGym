@@ -61,24 +61,41 @@ router.post(
     exerciseController.store,
 );
 
-// Exos
-
-router.get(
-    '/exos',
-    exoController.index,
-);
-
-router.get(
-    '/exos/:id',
-    auth.authenticateJwt,
-    exoController.show,
-);
+// Sets
 
 router.post(
     '/exercises/:id/sets',
     auth.authenticateJwt,
     setController.store,
 );
+
+
+// Exos
+
+router.get(
+    '/exos',
+    exoController.index,
+);
+router.get(
+    '/exos/:id',
+    auth.authenticateJwt,
+    exoController.show,
+);
+
+// Social
+
+router.post(
+    '/workouts/:id/likes',
+    auth.authenticateJwt,
+    workoutController.like,
+);
+
+router.get(
+    '/likes',
+    auth.authenticateJwt,
+    authController.likes,
+);
+
 
 // Admin routes
 

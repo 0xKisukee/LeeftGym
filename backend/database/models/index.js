@@ -21,7 +21,7 @@ Exercise.belongsTo(Workout, {
     foreignKey: 'workout_id'
 });
 
-// Each workout exercise corresponds to an exercise
+// Each exercise corresponds to an axo
 Exo.hasMany(Exercise, {
     foreignKey: 'exo_id'
 });
@@ -29,13 +29,25 @@ Exercise.belongsTo(Exo, {
     foreignKey: 'exo_id'
 });
 
-// Each workout exercise has many ordered sets
+// Each exercise has many ordered sets
 Exercise.hasMany(Set, {
     foreignKey: 'exercise_id'
 });
 Set.belongsTo(Exercise, {
     foreignKey: 'exercise_id'
 });
+
+// Each user has many liked workouts
+User.belongsToMany(Workout, {
+    through: 'workouts_likes',
+    foreignKey: 'user_id',
+    as: 'LikedWorkouts'
+})
+Workout.belongsToMany(User, {
+    through: 'workouts_likes',
+    foreignKey: 'workout_id',
+    as: 'LikedByUsers'
+})
 
 // Export all models
 module.exports = {

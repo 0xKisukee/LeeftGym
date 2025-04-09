@@ -1,4 +1,4 @@
-const {AppError} = require('../utils/appError');
+const { AppError } = require('../utils/appError');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const models = require('../../database/models');
@@ -8,7 +8,7 @@ async function register(data) {
 
     // Check if email already used
     const existingUser = await models.User.findOne({
-        where: {email: email}
+        where: { email: email }
     });
     if (existingUser) {
         throw new AppError('Email already used', 400);
@@ -24,15 +24,15 @@ async function register(data) {
     });
 
     // Login
-    return await login({email: email, password: password});
+    return await login({ email: email, password: password });
 }
 
 async function login(data) {
-    const {email, password} = data;
+    const { email, password } = data;
 
     // Check email
     const user = await models.User.findOne({
-        where: {email}
+        where: { email }
     });
     if (!user) {
         throw new AppError('Wrong email', 400);
@@ -51,7 +51,7 @@ async function login(data) {
             email: user.email
         },
         process.env.JWT_SECRET,
-        {expiresIn: '2h'}
+        { expiresIn: '2h' }
     );
 
     return {
@@ -63,7 +63,21 @@ async function login(data) {
     };
 }
 
+async function getLikedWorkouts(userId) {
+    const user = await models.User.findByPk(userId, {
+        include: [{
+            model: models.Workout,
+            as: 'LikedWorkouts',
+            attributes: ['id', 'name'],
+            through: { attributes: [] }
+        }]
+    });
+
+    return user.LikedWorkouts;
+}
+
 module.exports = {
     register,
     login,
+    getLikedWorkouts,
 };

@@ -22,6 +22,18 @@ module.exports = {
       {
         id: 5,
         name: 'Squat',
+      },
+      {
+        id: 6,
+        name: 'Curl Biceps',
+      },
+      {
+        id: 7,
+        name: 'Leg Extension',
+      },
+      {
+        id: 8,
+        name: 'Élévations latérales',
       }
     ], {});
 

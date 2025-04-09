@@ -5,8 +5,9 @@ module.exports = {
     await queryInterface.bulkInsert('users', [
       {
         id: 1,
-        email: 'john@example.com',
-        password: '$2b$10$/IEbvMCIA1H07r4BUUZPPefFHyBK7yX90.gJz9yKfAwK3OZlrQrm.', // À remplacer par un vrai hash
+        username: '0xAymane',
+        email: 'aymane@kisuke.com',
+        password: '$2b$10$/IEbvMCIA1H07r4BUUZPPefFHyBK7yX90.gJz9yKfAwK3OZlrQrm.', // Hash de "A"
         createdAt: new Date(),
       },
     ], {});
