@@ -33,8 +33,6 @@ export default function Create() {
     const [restTimer, setRestTimer] = useState(0);
     const [restTrigger, setRestTrigger] = useState(0);
 
-
-
     // Bottom sheet
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => ["50%", "90%"], []);
@@ -59,9 +57,6 @@ export default function Create() {
         ),
         []
     );
-
-
-
 
     // Initialize workout data
     useEffect(() => {
@@ -157,6 +152,32 @@ export default function Create() {
         router.back();
     }
 
+    // Function to add exercise
+    const addExercise = async (exoId) => {
+        const defaultOrder = createdWorkout.Exercises.length + 1;
+
+        const newExercise = {
+            order: defaultOrder,
+            rest_time: 180, // HERE IT SHOULD SET THE USER PERSONAL VALUE, DEFINED IN LOCALSTORAGE OR DATABASE
+            exo_id: exoId,
+            Sets: [],
+        };
+
+        const updatedWorkout = {
+            ...createdWorkout,
+            Exercises: [...createdWorkout.Exercises, newExercise],
+        };
+
+        setCreatedWorkout(updatedWorkout);
+
+        try {
+            await AsyncStorage.setItem('workoutData', JSON.stringify(updatedWorkout));
+            console.log("Exercise added to workout!");
+        } catch (e) {
+            console.error("Failed to save workout data", e);
+        }
+    };
+
     // Add set to state
     const addSet = (exerciseOrder, reps, weight) => {
         // Copier l'objet actuel
@@ -187,34 +208,6 @@ export default function Create() {
         setCreatedWorkout(updatedWorkout);
     };
 
-
-
-    // Function to add exercise
-    const addExercise = async (exoId) => {
-        const defaultOrder = createdWorkout.Exercises.length + 1;
-
-        const newExercise = {
-            order: defaultOrder,
-            rest_time: 180,
-            exo_id: exoId,
-            Sets: [],
-        };
-
-        const updatedWorkout = {
-            ...createdWorkout,
-            Exercises: [...createdWorkout.Exercises, newExercise],
-        };
-
-        setCreatedWorkout(updatedWorkout);
-
-        try {
-            await AsyncStorage.setItem('workoutData', JSON.stringify(updatedWorkout));
-            console.log("Exercise added to workout!");
-        } catch (e) {
-            console.error("Failed to save workout data", e);
-        }
-    };
-
     const exoBtn = (exo) =>
         <AppBtn
             title={exo.name}
@@ -223,8 +216,6 @@ export default function Create() {
                 handleClosePress();
             }}
         />
-
-
 
     const renderExercise = ({ item }) => (
         <ExerciseBoxCreate
@@ -264,10 +255,6 @@ export default function Create() {
         </View>
     );
 
-
-
-
-
     if (error) {
         return (
             <ScreenContainer>
@@ -276,8 +263,6 @@ export default function Create() {
             </ScreenContainer>
         );
     }
-
-
 
     return (
         <GestureHandlerRootView>
@@ -298,8 +283,6 @@ export default function Create() {
                     restDuration={restTimer}
                     trigger={restTrigger}
                 />
-
-
 
                 <BottomSheet
                     backgroundStyle={{
@@ -335,8 +318,6 @@ export default function Create() {
 
                     </BottomSheetView>
                 </BottomSheet>
-
-
 
             </ScreenContainerLight>
         </GestureHandlerRootView>
