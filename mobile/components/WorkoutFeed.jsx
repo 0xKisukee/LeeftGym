@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native';
-import { WorkoutCard } from './WorkoutCard';
+import { WorkoutPost } from './WorkoutPost';
 import {getAll} from '../api/workouts';
 
 export function WorkoutFeed() {
@@ -34,6 +34,16 @@ export function WorkoutFeed() {
         fetchWorkouts();
     }, []);
 
+    // Handle like updates
+    const handleLikeUpdate = (workoutId, updatedWorkout) => {
+        console.log(updatedWorkout);
+        setWorkouts(prevWorkouts => 
+            prevWorkouts.map(workout => 
+                workout.id === workoutId ? updatedWorkout : workout
+            )
+        );
+    };
+
     if (loading && !refreshing) {
         return (
             <View className="flex-1 justify-center items-center">
@@ -60,7 +70,12 @@ export function WorkoutFeed() {
         <View className="flex-1">
             <FlatList
                 data={workouts}
-                renderItem={({ item }) => <WorkoutCard workout={item} />}
+                renderItem={({ item }) => (
+                    <WorkoutPost 
+                        workout={item} 
+                        onLikeUpdate={handleLikeUpdate}
+                    />
+                )}
                 keyExtractor={(item) => item.id}
                 refreshControl={
                     <RefreshControl

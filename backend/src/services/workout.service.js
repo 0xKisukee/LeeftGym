@@ -30,6 +30,12 @@ async function getAll() {
                         as: 'Sets',
                     }
                 ]
+            },
+            {
+                model: models.User,
+                as: 'LikedByUsers',
+                attributes: ['id'],
+                through: { attributes: [] }
             }
         ],
         order: [['createdAt', 'DESC']],
@@ -85,6 +91,12 @@ async function show(userId, workoutId) {
                     }
                 ],
                 order: [['order', 'ASC']]
+            },
+            {
+                model: models.User,
+                as: 'LikedByUsers',
+                attributes: ['id'],
+                through: { attributes: [] }
             }
         ]
     });
@@ -196,8 +208,31 @@ async function like(userId, workoutId) {
     }
 
     await user.addLikedWorkout(workout);
-    return workout;
-
+    
+    // Fetch the updated workout with likes count
+    const updatedWorkout = await models.Workout.findByPk(workoutId, {
+        include: [
+            {
+                model: models.User,
+                as: 'User',
+                attributes: {
+                    exclude: ['password'],
+                }
+            },
+            {
+                model: models.Exercise,
+                as: 'Exercises',
+            },
+            {
+                model: models.User,
+                as: 'LikedByUsers',
+                attributes: ['id'],
+                through: { attributes: [] }
+            }
+        ]
+    });
+    
+    return updatedWorkout;
 }
 
 module.exports = {

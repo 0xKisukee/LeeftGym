@@ -8,9 +8,17 @@ export async function getWorkouts() {
     }
 }
 
+export async function getWorkout(id) {
+    try {
+        return await get(`/workouts/${id}`);
+    } catch (error) {
+        alert(error);
+    }
+}
+
 export async function getRoutines() {
     try {
-        return get("/workouts/routines");
+        return await get("/workouts/routines");
     } catch (error) {
         alert(error);
     }
@@ -21,5 +29,14 @@ export async function getAll() {
         return await get("/workouts/getAll");
     } catch (error) {
         alert(error);
+    }
+}
+
+export async function likeWorkout(workoutId) {
+    try {
+        return await post(`/workouts/${workoutId}/likes`);
+    } catch (error) {
+        console.error("Error liking workout:", error);
+        throw error;
     }
 }
