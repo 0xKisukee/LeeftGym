@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const models = require('../../database/models');
 
 async function register(data) {
-    const { email, password } = data;
+    const { email, username, password } = data;
 
     // Check if email already used
     const existingUser = await models.User.findOne({
@@ -20,6 +20,7 @@ async function register(data) {
     // Add new user to the database
     await models.User.create({
         email: email,
+        username: username,
         password: hashedPassword,
     });
 
@@ -48,6 +49,7 @@ async function login(data) {
     const token = jwt.sign(
         {
             userId: user.id,
+            username: user.username,
             email: user.email
         },
         process.env.JWT_SECRET,
@@ -58,6 +60,7 @@ async function login(data) {
         token,
         user: {
             userId: user.id,
+            username: user.username,
             email: user.email
         }
     };

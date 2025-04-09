@@ -104,7 +104,7 @@ export default function Profile() {
         <GestureHandlerRootView>
             <ScreenContainer>
                 <Title className="mb-1 mt-4">Profile</Title>
-                <SubTitle>Bonjour {userInfo.email}</SubTitle>
+                <SubTitle>Bonjour {userInfo.username}</SubTitle>
                 <AppBtn
                     title="Deconnexion"
                     handlePress={() => {

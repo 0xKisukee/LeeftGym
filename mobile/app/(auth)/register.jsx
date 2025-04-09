@@ -12,13 +12,14 @@ import {BodyText, Title} from "../../components/StyledText";
 export default function Register() {
     const [form, setForm] = useState({
         email: "",
+        username: "",
         password: "",
     })
     const [message, setMessage] = useState("");
     const [messageColor, setMessageColor] = useState("black");
 
-    const submitRegister = async (email, pwd) => {
-        const result = await register(form.email, form.password);
+    const submitRegister = async () => {
+        const result = await register(form.email, form.username, form.password);
         if (!result.token) {
             setMessage(result.message);
             setMessageColor("red");
@@ -46,6 +47,13 @@ export default function Register() {
             />
 
             <FormField
+                title="Nom d'utilisateur"
+                placeholder="Choisissez un pseudo"
+                value={form.username}
+                handleChangeText={(e) => setForm({...form, username: e})}
+            />
+
+            <FormField
                 title="Mot de passe"
                 placeholder="Entrez votre mot de passe"
                 value={form.password}
@@ -55,7 +63,7 @@ export default function Register() {
             <AppBtn
                 title="S'inscrire"
                 handlePress={() =>
-                    submitRegister(form.email, form.password)
+                    submitRegister(form.email, form.username, form.password)
                 }
             />
 

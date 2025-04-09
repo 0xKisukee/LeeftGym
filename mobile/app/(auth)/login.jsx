@@ -5,7 +5,7 @@ import BetaBar from "../../components/BetaBar";
 import AppBtn from "../../components/AppBtn";
 import FormField from "../../components/FormField";
 import {useState} from "react";
-import login from "../../api/login"
+import {login} from "../../api/login"
 import {save} from "../../api/jwt";
 import {containers, typography} from "../../styles/theme";
 import {Title, BodyText} from "../../components/StyledText";
@@ -18,8 +18,9 @@ export default function Login() {
     const [message, setMessage] = useState("");
     const [messageColor, setMessageColor] = useState("red");
 
-    const submitLogin = async (email, pwd) => {
+    const submitLogin = async () => {
         const result = await login(form.email, form.password);
+
         if (!result.token) {
             setMessage(result.message);
             setMessageColor("red");
@@ -56,7 +57,7 @@ export default function Login() {
             <AppBtn
                 title="Connexion"
                 handlePress={() =>
-                    submitLogin(form.email, form.password)
+                    submitLogin()
                 }
             />
 
