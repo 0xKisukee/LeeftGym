@@ -21,6 +21,11 @@ const store = catchAsync(async (req, res) => {
     res.status(254).json(result);
 });
 
+const storeFull = catchAsync(async (req, res) => {
+    const result = await workoutService.storeFull(req.auth.userId, req.body);
+    res.status(254).json(result);
+});
+
 const getRoutines = catchAsync(async (req, res) => {
     const result = await workoutService.getRoutines(req.auth.userId);
     res.status(254).json(result);
@@ -39,4 +44,5 @@ module.exports = {
     getRoutines,
     getAll,
     like,
+    storeFull,
 };

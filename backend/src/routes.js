@@ -42,6 +42,11 @@ router.post(
     auth.authenticateJwt,
     workoutController.store,
 );
+router.post(
+    '/workouts/storeFull',
+    auth.authenticateJwt,
+    workoutController.storeFull,
+);
 router.get(
     '/workouts/routines',
     auth.authenticateJwt,

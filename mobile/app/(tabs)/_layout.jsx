@@ -1,10 +1,7 @@
-import {Tabs, Redirect, router} from "expo-router";
+import {Tabs} from "expo-router";
 import {Image, Text, View} from "react-native";
 import "../../global.css"
-
 import {icons} from '../../constants';
-import {getValueFor, isAuth} from "../../api/jwt";
-import {useEffect, useState} from "react";
 
 const TabIcon = ({icon, color, name, focused}) => {
     return (

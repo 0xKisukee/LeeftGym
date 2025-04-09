@@ -1,26 +1,17 @@
-const API_URL = 'https://gym.leeft.fun/api';
-const API_URL2 = 'http://localhost:3000/api';
+import {post} from "./main";
+
+const API_URL2 = 'https://gym.leeft.fun/api';
+const API_URL = 'http://localhost:3000/api';
 
 export default async function register(email, password) {
     try {
-        const response = await fetch(
-            API_URL + '/register',
+        return await post(
+            "/register",
             {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
+                email: email,
+                password: password,
             }
         );
-
-        const json = await response.json();
-        return json;
-
     } catch (error) {
         alert(error);
     }

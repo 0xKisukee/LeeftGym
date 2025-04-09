@@ -1,12 +1,11 @@
 import "../global.css";
-import {Text, View} from "react-native";
-import {Container, ScreenContainer} from "../components/ScreenContainer";
+import {Text} from "react-native";
+import {ScreenContainer} from "../components/ScreenContainer";
 import {router} from "expo-router";
-import BetaBar from "../components/BetaBar";
 import AppBtn from "../components/AppBtn";
 import {useEffect, useState} from "react";
-import {isAuth} from "../api/jwt";
-import {Header} from "../components/StyledText";
+import {isAuth} from "../api/login";
+import {Title} from "../components/StyledText";
 
 export default function Index() {
     const [loading, setLoading] = useState(true);
@@ -29,7 +28,7 @@ export default function Index() {
     }
     return (
         <ScreenContainer>
-            <Header className="mx-5">Bienvenue sur Leeft !</Header>
+            <Title className="mx-5">Bienvenue sur Leeft !</Title>
             <Text className="mx-5">Cliquez sur le bouton ci-dessous pour commencer</Text>
             <AppBtn
                 title="Commencer"

@@ -1,29 +1,9 @@
-import {getValueFor, save} from "./jwt";
-
-const API_URL = 'https://gym.leeft.fun/api';
-const API_URL2 = 'http://localhost:3000/api';
+import { get, post } from "./main";
 
 export async function getAllExos() {
     try {
-        const response = await fetch(
-            API_URL + '/exos',
-            {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-
-        const json = await response.json();
-        return json;
-
+        return await get("/exos");
     } catch (error) {
         alert(error);
     }
-}
-
-module.exports = {
-    getAllExos
 }

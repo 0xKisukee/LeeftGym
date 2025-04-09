@@ -6,7 +6,7 @@ import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import WorkoutBox from "../../components/boxes/WorkoutBox";
 import {getWorkouts} from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
-import {me} from "../../api/jwt";
+import {me} from "../../api/login";
 import {SubTitle, Title} from "../../components/StyledText";
 import {ScreenContainer} from "../../components/ScreenContainer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

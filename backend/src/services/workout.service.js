@@ -1,5 +1,7 @@
 const {AppError} = require('../utils/appError');
 const models = require('../../database/models');
+const exerciseService = require('./exercise.service');
+const setService = require('./set.service');
 
 // This getAll function doesnt return routines
 async function getAll() {
@@ -108,6 +110,53 @@ async function store(userId, data) {
     });
 }
 
+async function storeFull(userId, data) {
+    // Pushing workout
+    const workout = await models.Workout.create({
+        name: data.name,
+        is_private: data.is_private,
+        is_routine: data.is_routine || false,
+        started_at: data.started_at,
+        completed_at: data.completed_at,
+        user_id: userId
+    });
+
+    // Pushing exercises
+    const exercisesData = data.Exercises;
+    for (const exerciseData of exercisesData) {
+        const exercise = await exerciseService.store(userId, workout.id, exerciseData);
+
+        // Pushing sets
+        const setsData = exerciseData.Sets;
+        for (const setData of setsData) {
+            await setService.store(userId, exercise.id, setData);
+        }
+    }
+
+    // Fetch the complete workout with all relations
+    const completeWorkout = await models.Workout.findByPk(workout.id, {
+        include: [
+            {
+                model: models.Exercise,
+                as: 'Exercises',
+                include: [
+                    {
+                        model: models.Exo,
+                        as: 'Exo',
+                    },
+                    {
+                        model: models.Set,
+                        as: 'Sets',
+                    }
+                ],
+                order: [['order', 'ASC']]
+            }
+        ]
+    });
+
+    return completeWorkout;
+}
+
 async function getRoutines(userId) {
     const workouts = await models.Workout.findAll({
         where: {
@@ -155,6 +204,7 @@ module.exports = {
     index,
     show,
     store,
+    storeFull,
     getRoutines,
     getAll,
     like,

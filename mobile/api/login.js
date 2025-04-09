@@ -1,27 +1,43 @@
-const API_URL = 'https://gym.leeft.fun/api';
-const API_URL2 = 'http://localhost:3000/api';
+import {get, post} from "./main";
+import {getValueFor} from "./jwt";
 
-export default async function login(email, password) {
+export async function login(email, password) {
     try {
-        const response = await fetch(
-            API_URL + '/login',
+        return await post(
+            "/login",
             {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
+                email: email,
+                password: password,
             }
         );
 
-        const json = await response.json();
-        return json;
-
     } catch (error) {
         console.error(error);
+    }
+}
+
+export async function me() {
+    try {
+        return await get("/me");
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function isAuth() {
+    const token = await getValueFor("userJWT");
+    if (!token) {
+        console.log("not auth");
+        return false;
+    }
+
+    const userInfos = await me();
+
+    if (!userInfos.userId) {
+        console.log("auth expired");
+        return false;
+    } else {
+        console.log("auth ok");
+        return userInfos;
     }
 }

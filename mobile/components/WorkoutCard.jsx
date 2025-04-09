@@ -13,11 +13,7 @@ export function WorkoutCard({ workout }) {
     }
 
     return (
-        <TouchableOpacity
-            className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden"
-            onPress={() => router.push(`/workout/${workout.id}`)} // NOT WORKING YET
-        >
-            <View className="p-4">
+            <View className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden p-4">
                 <View className="flex-row items-center mb-2">
                     <Text className="font-semibold">{workout.User?.email || 'Anonymous'}</Text>
                     <Text className="text-gray-500 text-sm ml-2">
@@ -47,7 +43,10 @@ export function WorkoutCard({ workout }) {
                         </Text>
                     </View>
                 </View>
+
+                <TouchableOpacity className="mt-4">
+                    <Text className="text-gray-500">Liker</Text>
+                </TouchableOpacity>
             </View>
-        </TouchableOpacity>
     );
 } 
