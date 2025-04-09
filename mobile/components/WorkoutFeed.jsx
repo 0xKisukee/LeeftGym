@@ -4,7 +4,7 @@ import { Text } from 'react-native';
 import { WorkoutPost } from './WorkoutPost';
 import {getAll} from '../api/workouts';
 
-export function WorkoutFeed() {
+export function WorkoutFeed({ userInfo }) {
     const [workouts, setWorkouts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -36,7 +36,6 @@ export function WorkoutFeed() {
 
     // Handle like updates
     const handleLikeUpdate = (workoutId, updatedWorkout) => {
-        console.log(updatedWorkout);
         setWorkouts(prevWorkouts => 
             prevWorkouts.map(workout => 
                 workout.id === workoutId ? updatedWorkout : workout
@@ -74,6 +73,7 @@ export function WorkoutFeed() {
                     <WorkoutPost 
                         workout={item} 
                         onLikeUpdate={handleLikeUpdate}
+                        userInfo={userInfo}
                     />
                 )}
                 keyExtractor={(item) => item.id}

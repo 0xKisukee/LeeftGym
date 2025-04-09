@@ -48,10 +48,6 @@ export default function Profile() {
         fetchWorkouts();
     }, [isFocused]);
 
-
-
-
-
     const copyAsRoutine = async () => {
         const routineWorkout = {
             ...selectedWorkout,
@@ -62,10 +58,6 @@ export default function Profile() {
         console.log(routineWorkout)
         await pushWorkout(routineWorkout);
     }
-
-
-
-
 
     // Bottom sheet
     const sheetRef = useRef(null);
@@ -91,10 +83,6 @@ export default function Profile() {
         ),
         []
     );
-
-
-
-
 
     if (!userInfo) {
         return <Text>Loading...</Text>;
@@ -124,8 +112,6 @@ export default function Profile() {
                     )}
                 />
 
-
-
                 <BottomSheet
                     backgroundStyle={{backgroundColor: "#232323"}}
                     ref={sheetRef}
@@ -148,9 +134,6 @@ export default function Profile() {
 
                     </BottomSheetView>
                 </BottomSheet>
-
-
-
 
             </ScreenContainer>
         </GestureHandlerRootView>
