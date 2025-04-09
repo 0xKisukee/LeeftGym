@@ -207,7 +207,19 @@ async function like(userId, workoutId) {
         throw new Error(`Workout with ID ${workoutId} not found.`);
     }
 
-    await user.addLikedWorkout(workout);
+    // Check if the user has already liked this workout
+    const likedWorkouts = await user.getLikedWorkouts({
+        where: { id: workoutId }
+    });
+    const hasLiked = likedWorkouts.length > 0;
+    
+    if (hasLiked) {
+        // Remove the like
+        await user.removeLikedWorkout(workout);
+    } else {
+        // Add the like
+        await user.addLikedWorkout(workout);
+    }
     
     // Fetch the updated workout with likes count
     const updatedWorkout = await models.Workout.findByPk(workoutId, {
