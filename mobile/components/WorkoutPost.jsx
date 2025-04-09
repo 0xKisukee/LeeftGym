@@ -3,9 +3,12 @@ import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { likeWorkout } from '../api/workouts';
 import { getValueFor } from '../api/jwt';
+import {LikeBtn} from '../components/icons/LikeBtn';
 
-export function WorkoutPost({ workout, onLikeUpdate }) {
+export function WorkoutPost({ workout, onLikeUpdate, userInfo }) {
     const [isLiking, setIsLiking] = useState(false);
+    const [localLikesCount, setLocalLikesCount] = useState(workout.LikedByUsers ? workout.LikedByUsers.length : 0);
+    const [localHasLiked, setLocalHasLiked] = useState(workout.LikedByUsers && workout.LikedByUsers.some(user => user.id === userInfo?.userId));
     
     // Fonction pour formater le temps en HH:MM
     const formatTime = () => {
@@ -15,12 +18,6 @@ export function WorkoutPost({ workout, onLikeUpdate }) {
         const secs = seconds % 60;
         return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
     }
-
-    // Get likes count from LikedByUsers array
-    const likesCount = workout.LikedByUsers ? workout.LikedByUsers.length : 0;
-    
-    // Check if the current user has liked this workout
-    const hasLiked = workout.LikedByUsers && workout.LikedByUsers.some(user => user.id === currentUserId);
     
     // Handle like button press
     const handleLike = async () => {
@@ -29,6 +26,10 @@ export function WorkoutPost({ workout, onLikeUpdate }) {
         try {
             setIsLiking(true);
             const response = await likeWorkout(workout.id);
+            
+            // Update local state immediately for better UX
+            setLocalHasLiked(!localHasLiked);
+            setLocalLikesCount(prev => localHasLiked ? prev - 1 : prev + 1);
             
             // Update the workout with the new likes count
             if (onLikeUpdate) {
@@ -41,9 +42,6 @@ export function WorkoutPost({ workout, onLikeUpdate }) {
             setIsLiking(false);
         }
     };
-    
-    // Get current user ID
-    const currentUserId = 1; // Replace with actual user ID retrieval logic
 
     return (
             <View className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden p-4">
@@ -69,7 +67,7 @@ export function WorkoutPost({ workout, onLikeUpdate }) {
 
                     <View className="flex-row items-center">
                         <Text className="text-gray-500 mr-2">
-                            {likesCount} likes
+                            {localLikesCount} likes
                         </Text>
                         <Text className="text-gray-500">
                             {workout.comments || 0} comments
@@ -77,15 +75,10 @@ export function WorkoutPost({ workout, onLikeUpdate }) {
                     </View>
                 </View>
 
-                <TouchableOpacity 
-                    className={`mt-4 ${hasLiked ? 'bg-blue-100' : ''}`} 
-                    onPress={handleLike}
-                    disabled={isLiking}
-                >
-                    <Text className={`${hasLiked ? 'text-blue-500 font-bold' : 'text-gray-500'}`}>
-                        {isLiking ? 'Liking...' : hasLiked ? 'Liked' : 'Like'}
-                    </Text>
-                </TouchableOpacity>
+                <LikeBtn
+                    handleLike={handleLike}
+                    hasLiked={localHasLiked}
+                />
             </View>
     );
 } 
