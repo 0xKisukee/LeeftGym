@@ -20,24 +20,23 @@ export async function me() {
     try {
         return await get("/me");
     } catch (error) {
-        console.error(error);
+        console.log(error);
+        throw error; // Propager l'erreur pour que isAuth puisse la gérer
     }
 }
 
 export async function isAuth() {
     const token = await getValueFor("userJWT");
     if (!token) {
-        console.log("not auth");
+        console.log("not auth - no token");
         return false;
     }
 
-    const userInfos = await me();
-
-    if (!userInfos.userId) {
-        console.log("auth expired");
-        return false;
-    } else {
-        console.log("auth ok");
+    try {
+        const userInfos = await me();
         return userInfos;
+    } catch (error) {
+        console.log("Auth error - token expired or invalid:", error);
+        return false;
     }
 }
