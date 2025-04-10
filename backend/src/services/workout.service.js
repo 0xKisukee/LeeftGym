@@ -50,6 +50,13 @@ async function index(userId) {
         },
         include: [
             {
+                model: models.User,
+                as: 'User',
+                attributes: {
+                    exclude: ['password'],
+                }
+            },
+            {
                 model: models.Exercise,
                 as: 'Exercises',
                 include: [

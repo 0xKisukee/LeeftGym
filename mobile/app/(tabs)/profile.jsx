@@ -44,7 +44,8 @@ export default function Profile() {
             setLoading(true);
             setError(null);
             const data = await getWorkouts();
-            setWorkouts(data.filter(workout => workout.is_routine === false)); // exclude routines
+            const filteredWorkouts = data.filter(workout => workout.is_routine === false);
+            setWorkouts(filteredWorkouts); // exclude routines
         } catch (error) {
             console.error('Error fetching workouts:', error);
             setError('Failed to load workouts. Please try again.');
