@@ -3,7 +3,7 @@
 
 // https://gym.leeft.fun/api
 // http://localhost:3000/api
-export const BASE_URL = "http://localhost:3000/api";
+export const BASE_URL = "https://gym.leeft.fun/api";
 
 export const HEADERS = {
     'Accept': 'application/json',
