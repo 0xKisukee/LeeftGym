@@ -1,10 +1,10 @@
-import {Text, View, StyleSheet, SafeAreaView, FlatList} from "react-native";
+import {Text, View, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, RefreshControl} from "react-native";
 import AppBtn from "../../components/AppBtn";
 import {forget, getValueFor} from "../../api/jwt";
 import {router} from "expo-router";
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import WorkoutBox from "../../components/boxes/WorkoutBox";
-import {getWorkouts} from "../../api/workouts";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {WorkoutBox} from "../../components/boxes/WorkoutBox";
+import {getAll, getWorkouts} from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import {me} from "../../api/login";
 import {SubTitle, Title} from "../../components/StyledText";
@@ -15,16 +15,17 @@ import pushWorkout from "../../api/pushWorkout";
 
 export default function Profile() {
     const [userInfo, setUserInfo] = useState(null);
-    const [workoutsList, setWorkoutsList] = useState([]);
+    const [workouts, setWorkouts] = useState([]);
     const [selectedWorkout, setSelectedWorkout] = useState(emptyWorkout);
+    const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const isFocused = useIsFocused();
 
     const emptyWorkout = {
         name: "",
         is_private: false, // set to default user choice
-        started_at: new Date(), // i think we remove this and just push it in local storage to wait for completion to push
-        completed_at: null,
-        is_routine: false, // state of a checkbox
         Exercises: [],
     }
 
@@ -39,14 +40,23 @@ export default function Profile() {
     };
 
     const fetchWorkouts = async () => {
-        const workouts = await getWorkouts();
-        setWorkoutsList(workouts.filter(workout => workout.is_routine === false)); // exclude routines
+        try {
+            setLoading(true);
+            setError(null);
+            const data = await getWorkouts();
+            setWorkouts(data.filter(workout => workout.is_routine === false)); // exclude routines
+        } catch (error) {
+            console.error('Error fetching workouts:', error);
+            setError('Failed to load workouts. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
         fetchUser();
         fetchWorkouts();
-    }, [isFocused]);
+    }, []); // I removed "isFocused", this should be refreshed only when needed
 
     const copyAsRoutine = async () => {
         const routineWorkout = {
@@ -59,7 +69,23 @@ export default function Profile() {
         await pushWorkout(routineWorkout);
     }
 
-    // Bottom sheet
+    // Handle like updates
+    const handleLikeUpdate = (workoutId, updatedWorkout) => {
+        setWorkouts(prevWorkouts =>
+            prevWorkouts.map(workout =>
+                workout.id === workoutId ? updatedWorkout : workout
+            )
+        );
+    };
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchWorkouts();
+        setRefreshing(false);
+    };
+
+
+    // Bottom sheet //
     const sheetRef = useRef(null);
     const snapPoints = useMemo(() => ["20%", "50%", "90%"], []);
 
@@ -84,8 +110,12 @@ export default function Profile() {
         []
     );
 
-    if (!userInfo) {
-        return <Text>Loading...</Text>;
+    if ((loading && !refreshing) || !userInfo) {
+        return (
+            <ScreenContainer className="justify-center items-center">
+                <ActivityIndicator size="large" />
+            </ScreenContainer>
+        );
     }
 
     return (
@@ -100,16 +130,26 @@ export default function Profile() {
                     }}
                 />
                 <FlatList
-                    data={workoutsList}
+                    className="mt-4"
+                    data={workouts}
                     renderItem={({item}) => (
                         <WorkoutBox
                             workout={item}
+                            onLikeUpdate={handleLikeUpdate}
+                            userInfo={userInfo}
                             onMenuPress={() => {
                                 setSelectedWorkout(item);
                                 handleSnapPress(0)
                             }}
                         />
                     )}
+                    keyExtractor={(item) => item.id}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }
                 />
 
                 <BottomSheet

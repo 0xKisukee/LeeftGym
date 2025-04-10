@@ -1,35 +1,107 @@
-import "../../global.css";
-import {FlatList, Text, TextInput, TouchableOpacity, View} from "react-native";
-import ExerciseBox from "./ExerciseBox";
+import React, { useState } from 'react';
+import {View, Text, TouchableOpacity, Image, Alert, FlatList} from 'react-native';
+import { router } from 'expo-router';
+import { likeWorkout } from '../../api/workouts';
+import { getValueFor } from '../../api/jwt';
+import {LikeBtn} from '../icons/LikeBtn';
 import {BodyText, SubTitle, Title} from "../StyledText";
+import ExerciseBox from "./ExerciseBox";
+import {useExos} from "../../contexts/ExoContext";
 
-export default function WorkoutBox({workout, onMenuPress}) {
-    // Trier les exercices par ordre
+export function WorkoutBox({ workout, onLikeUpdate, userInfo, onMenuPress }) {
+    const [isLiking, setIsLiking] = useState(false);
+    const [localLikesCount, setLocalLikesCount] = useState(workout.LikedByUsers ? workout.LikedByUsers.length : 0);
+    const [localHasLiked, setLocalHasLiked] = useState(workout.LikedByUsers && workout.LikedByUsers.some(user => user.id === userInfo?.userId));
+
+    const {allExos} = useExos();
+
     const sortedExercises = [...workout.Exercises].sort((a, b) => a.order - b.order);
 
+    const getExoNameById = (exoId) => {
+        const exo = allExos.find(exo => exo.id === exoId);
+        return exo ? exo.name : "Chargement...";
+    };
+
+    // Fonction pour obtenir le temps du workout formaté en HH:MM
+    const getDuration = () => {
+        const seconds = Math.round((new Date(workout.createdAt).getTime() - new Date(workout.started_at).getTime()) / 1000) // Convert to minutes
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    // Handle like button press
+    const handleLike = async () => {
+        if (isLiking) return;
+        
+        try {
+            setIsLiking(true);
+            const response = await likeWorkout(workout.id);
+            
+            // Update local state immediately for better UX
+            setLocalHasLiked(!localHasLiked);
+            setLocalLikesCount(prev => localHasLiked ? prev - 1 : prev + 1);
+            
+            // Update the workout with the new likes count
+            if (onLikeUpdate) {
+                onLikeUpdate(workout.id, response);
+            }
+        } catch (error) {
+            console.error('Error liking workout:', error);
+            Alert.alert('Error', 'Failed to like the workout. Please try again.');
+        } finally {
+            setIsLiking(false);
+        }
+    };
+
     return (
-        <View className="my-3 rounded-lg bg-bgsec">
+            <View className="bg-bgsec rounded-lg mb-4 overflow-hidden p-4">
+                <View className="flex-row justify-between mb-2">
+                    <View className="flex-row items-center">
+                        <BodyText className="font-bold">{workout.User?.username || 'Anonymous'}</BodyText>
+                        <BodyText className="ml-2">
+                            {new Date(workout.createdAt).toLocaleDateString()}
+                        </BodyText>
+                    </View>
+                    <TouchableOpacity
+                        className="mr-4"
+                        onPress={onMenuPress}
+                    >
+                        <Title>...</Title>
+                    </TouchableOpacity>
+                </View>
 
-            <View className="flex-row justify-between border-b border-primary">
+                <SubTitle className="mb-2">{workout.name || 'Untitled Workout'}</SubTitle>
+                <BodyText className="italic mb-6">{workout.description || 'No description available'}</BodyText>
 
-                <SubTitle className="mx-5 my-3">{workout.name}</SubTitle>
+                <FlatList
+                    className="mb-6"
+                    data={sortedExercises}
+                    renderItem={({item}) => (
+                        <BodyText className="font-bold">
+                            - {getExoNameById(item.exo_id)}
+                        </BodyText>
+                    )}
+                />
 
-                <TouchableOpacity 
-                    className="mr-5 mt-1"
-                    onPress={onMenuPress}
-                >
-                    <Title>
-                        ...
-                    </Title>
-                </TouchableOpacity>
+                <View className="flex-row items-center justify-between">
+                    <LikeBtn
+                        handleLike={handleLike}
+                        hasLiked={localHasLiked}
+                    />
+
+                    <View className="flex-row items-center">
+                        <Text className="text-gray-500 mr-2 right">
+                            {localLikesCount} likes
+                        </Text>
+
+                        <Text className="text-gray-500">
+                            {workout.comments || 0} comments
+                        </Text>
+                    </View>
+                </View>
 
             </View>
-
-            <FlatList
-                data={sortedExercises}
-                renderItem={({item}) => <ExerciseBox exercise={item}/>}
-            />
-
-        </View>
-    )
-}
+    );
+} 
