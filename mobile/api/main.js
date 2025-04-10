@@ -24,14 +24,15 @@ const request = async (endpoint, options = {}) => {
         if (!response.ok) {
             const error = new Error(`HTTP error! status: ${response.status}`);
             error.status = response.status;
-            throw error;
+            console.log(error);
+            return await response.json();
         }
 
         const data = await response.json();
         return data;
     } catch (error) {
         console.error('API Request failed:', error);
-        throw error;
+
     }
 }
 
