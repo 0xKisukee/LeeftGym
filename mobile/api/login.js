@@ -25,6 +25,7 @@ export async function me() {
     }
 }
 
+// THIS FUNCTION IS NOT GOOD, I SHOULD USE AUTH CONTEXT AND JWT VALIDATION
 export async function isAuth() {
     const token = await getValueFor("userJWT");
     console.log("starting isAuth() index function, token:", token);

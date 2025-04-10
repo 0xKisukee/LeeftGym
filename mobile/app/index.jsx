@@ -12,7 +12,7 @@ export default function Index() {
 
     const checkAuth = async () => {
         const authenticated = await isAuth();
-        if (authenticated) {
+        if (authenticated.userId) {
             console.log("Authenticated, redirecting to profile");
             router.replace("/profile");
         } else {
