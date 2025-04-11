@@ -1,33 +1,29 @@
 import {ActivityIndicator, FlatList, RefreshControl, Text, View} from "react-native";
 import { ScreenContainer } from "../../components/ScreenContainer";
 import { Title } from "../../components/StyledText";
-import { me } from "../../api/login";
-import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
+import React, {useState, useEffect, useRef, useMemo, useCallback, useContext} from "react";
 import {WorkoutBox} from "../../components/boxes/WorkoutBox";
 import {getAll} from "../../api/workouts";
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
 import AppBtn from "../../components/AppBtn";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import pushWorkout from "../../api/pushWorkout";
+import {pushWorkout} from "../../api/workouts";
+import {UserContext} from "../../contexts/UserContext";
 
 export default function Home() {
-    const [userInfo, setUserInfo] = useState(null);
     const [workouts, setWorkouts] = useState([]);
     const [selectedWorkout, setSelectedWorkout] = useState(emptyWorkout);
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const {userInfos} = useContext(UserContext);
+
     const emptyWorkout = {
         name: "",
         is_private: false, // set to default user choice
         Exercises: [],
     }
-
-    const fetchUser = async () => {
-        const infos = await me();
-        setUserInfo(infos);
-    };
 
     const fetchWorkouts = async () => {
         try {
@@ -44,7 +40,6 @@ export default function Home() {
     };
 
     useEffect(() => {
-        fetchUser();
         fetchWorkouts();
     }, []);
 
@@ -120,7 +115,7 @@ export default function Home() {
                         <WorkoutBox
                             workout={item}
                             onLikeUpdate={handleLikeUpdate}
-                            userInfo={userInfo}
+                            userInfo={userInfos}
                             onMenuPress={() => {
                                 setSelectedWorkout(item);
                                 handleSnapPress(0)

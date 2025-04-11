@@ -7,11 +7,14 @@ import {LikeBtn} from '../icons/LikeBtn';
 import {BodyText, SubTitle, Title} from "../StyledText";
 import ExerciseBox from "./ExerciseBox";
 import {ExoContext} from "../../contexts/ExoContext";
+import {UserContext} from "../../contexts/UserContext";
 
-export function WorkoutBox({ workout, onLikeUpdate, userInfo, onMenuPress }) {
+export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
+    const {userInfos} = useContext(UserContext);
+
     const [isLiking, setIsLiking] = useState(false);
     const [localLikesCount, setLocalLikesCount] = useState(workout.LikedByUsers ? workout.LikedByUsers.length : 0);
-    const [localHasLiked, setLocalHasLiked] = useState(workout.LikedByUsers && workout.LikedByUsers.some(user => user.id === userInfo?.userId));
+    const [localHasLiked, setLocalHasLiked] = useState(workout.LikedByUsers && workout.LikedByUsers.some(user => user.id === userInfos?.userId));
 
     const { allExos, isLoading, error } = useContext(ExoContext);
 

@@ -1,41 +1,34 @@
 import "../global.css";
-import {Text} from "react-native";
+import {ActivityIndicator, Text} from "react-native";
 import {ScreenContainer} from "../components/ScreenContainer";
 import {router} from "expo-router";
 import AppBtn from "../components/AppBtn";
-import {useEffect, useState} from "react";
-import {isAuth} from "../api/login";
-import {Title} from "../components/StyledText";
+import React, {useContext, useEffect, useState} from "react";
+import {BodyText, Title} from "../components/StyledText";
+import {UserContext} from "../contexts/UserContext";
 
 export default function Index() {
-    const [loading, setLoading] = useState(true);
+    const [pageLoaded, setPageLoaded] = useState(false)
 
-    const checkAuth = async () => {
-        const authenticated = await isAuth();
-        if (authenticated.userId) {
-            console.log("Authenticated, redirecting to profile");
-            router.replace("/profile");
-        } else {
-            console.log("Unauthenticated, redirecting to login");
-            router.replace("/login");
+    const {userInfos, isAuth, isLoading} = useContext(UserContext);
+
+    useEffect(() => {
+        console.log("index use effect");
+        // Only proceed with navigation if loading is complete
+        if (!isLoading) {
+            if (isAuth) {
+                console.log("Authenticated, redirecting to profile");
+                router.replace("/profile");
+            } else {
+                console.log("Unauthenticated, redirecting to login");
+                router.replace("/login");
+            }
         }
-    };
+    }, [isAuth, isLoading]); // Add isLoading to dependencies
 
-    useEffect( () => {
-        checkAuth();
-    }, []);
-
-    if (loading) {
-        return <Text>Loading...</Text>; // Display loading state while checking token
-    }
     return (
         <ScreenContainer>
-            <Title className="mx-5">Bienvenue sur Leeft !</Title>
-            <Text className="mx-5">Cliquez sur le bouton ci-dessous pour commencer</Text>
-            <AppBtn
-                title="Commencer"
-                handlePress={() => router.push("/register")}
-            />
+            <ActivityIndicator size="large" />
         </ScreenContainer>
     )
 }

@@ -2,7 +2,7 @@ import {Text, View, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, Refre
 import AppBtn from "../../components/AppBtn";
 import {forget, getValueFor} from "../../api/jwt";
 import {router} from "expo-router";
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {WorkoutBox} from "../../components/boxes/WorkoutBox";
 import {getAll, getWorkouts} from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
@@ -11,15 +11,17 @@ import {SubTitle, Title} from "../../components/StyledText";
 import {ScreenContainer} from "../../components/ScreenContainer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import pushWorkout from "../../api/pushWorkout";
+import {pushWorkout} from "../../api/workouts";
+import {UserContext} from "../../contexts/UserContext";
 
 export default function Profile() {
-    const [userInfo, setUserInfo] = useState(null);
     const [workouts, setWorkouts] = useState([]);
     const [selectedWorkout, setSelectedWorkout] = useState(emptyWorkout);
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const {userInfos} = useContext(UserContext);
 
     const isFocused = useIsFocused();
 
@@ -33,11 +35,6 @@ export default function Profile() {
         forget("userJWT");
         router.replace("/");
     }
-
-    const fetchUser = async () => {
-        const infos = await me();
-        setUserInfo(infos);
-    };
 
     const fetchWorkouts = async () => {
         try {
@@ -55,7 +52,6 @@ export default function Profile() {
     };
 
     useEffect(() => {
-        fetchUser();
         fetchWorkouts();
     }, []); // I removed "isFocused", this should be refreshed only when needed
 
@@ -111,7 +107,7 @@ export default function Profile() {
         []
     );
 
-    if ((loading && !refreshing) || !userInfo) {
+    if ((loading && !refreshing) || !userInfos) {
         return (
             <ScreenContainer className="justify-center items-center">
                 <ActivityIndicator size="large" />
@@ -123,7 +119,7 @@ export default function Profile() {
         <GestureHandlerRootView>
             <ScreenContainer>
                 <Title className="mb-1 mt-4">Profile</Title>
-                <SubTitle>Bonjour {userInfo.username}</SubTitle>
+                <SubTitle>Bonjour {userInfos.username}</SubTitle>
                 <AppBtn
                     title="Deconnexion"
                     handlePress={() => {
@@ -137,7 +133,7 @@ export default function Profile() {
                         <WorkoutBox
                             workout={item}
                             onLikeUpdate={handleLikeUpdate}
-                            userInfo={userInfo}
+                            userInfo={userInfos}
                             onMenuPress={() => {
                                 setSelectedWorkout(item);
                                 handleSnapPress(0)

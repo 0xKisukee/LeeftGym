@@ -20,27 +20,7 @@ export async function me() {
     try {
         return await get("/me");
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw error; // Propager l'erreur pour que isAuth puisse la gérer
-    }
-}
-
-// THIS FUNCTION IS NOT GOOD, I SHOULD USE AUTH CONTEXT AND JWT VALIDATION
-export async function isAuth() {
-    const token = await getValueFor("userJWT");
-    console.log("starting isAuth() index function, token:", token);
-    if (!token) {
-        console.log("not auth - no token");
-        return false;
-    }
-
-    try {
-        console.log("trying to call me() function from isAuth()");
-        const userInfos = await me();
-        return userInfos;
-    } catch (error) {
-        console.log("Auth error - token expired or invalid:", error);
-        forget("userJWT");
-        return false;
     }
 }
