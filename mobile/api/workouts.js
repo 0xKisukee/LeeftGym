@@ -1,16 +1,28 @@
 import { get, post } from "./main";
 
-export async function getWorkouts() {
+export async function pushWorkout(workout) {
     try {
-        return await get("/workouts");
+        console.log("Pushing this workout to db:", workout);
+
+        return await post(
+            "/workouts/storeFull",
+            {
+                name: workout.name,
+                is_private: workout.is_private,
+                is_routine: workout.is_routine || false,
+                started_at: workout.started_at,
+                completed_at: new Date(),
+                Exercises: workout.Exercises, // this contains sets
+            }
+        );
     } catch (error) {
         alert(error);
     }
 }
 
-export async function getWorkout(id) {
+export async function getWorkouts() {
     try {
-        return await get(`/workouts/${id}`);
+        return await get("/workouts");
     } catch (error) {
         alert(error);
     }

@@ -4,7 +4,7 @@ import FormField from "../../../components/FormField";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import pushWorkout from "../../../api/pushWorkout";
+import {pushWorkout} from "../../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {BodyText, Title} from "../../../components/StyledText";
@@ -40,8 +40,6 @@ export default function Create() {
     }, [isFocused]);
 
     const saveWorkout = async (createdWorkout) => {
-        // if check needed use this
-        // const pushResult = await pushWorkout(createdWorkout);
         if (!createdWorkout.name) {
             const updatedWorkout = {...createdWorkout};
             updatedWorkout.name = "Entraînement du soir";
