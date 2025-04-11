@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {View, Text, TouchableOpacity, Image, Alert, FlatList} from 'react-native';
 import { router } from 'expo-router';
 import { likeWorkout } from '../../api/workouts';
@@ -6,14 +6,14 @@ import { getValueFor } from '../../api/jwt';
 import {LikeBtn} from '../icons/LikeBtn';
 import {BodyText, SubTitle, Title} from "../StyledText";
 import ExerciseBox from "./ExerciseBox";
-import {useExos} from "../../contexts/ExoContext";
+import {ExoContext} from "../../contexts/ExoContext";
 
 export function WorkoutBox({ workout, onLikeUpdate, userInfo, onMenuPress }) {
     const [isLiking, setIsLiking] = useState(false);
     const [localLikesCount, setLocalLikesCount] = useState(workout.LikedByUsers ? workout.LikedByUsers.length : 0);
     const [localHasLiked, setLocalHasLiked] = useState(workout.LikedByUsers && workout.LikedByUsers.some(user => user.id === userInfo?.userId));
 
-    const {allExos} = useExos();
+    const { allExos, isLoading, error } = useContext(ExoContext);
 
     const sortedExercises = [...workout.Exercises].sort((a, b) => a.order - b.order);
 

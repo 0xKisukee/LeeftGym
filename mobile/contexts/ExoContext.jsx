@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getAllExos } from '../api/exercises';
 
-const ExoContext = createContext();
+export const ExoContext = createContext();
 
 export function ExoProvider({ children }) {
     const [allExos, setAllExos] = useState([]);
@@ -30,12 +30,4 @@ export function ExoProvider({ children }) {
             {children}
         </ExoContext.Provider>
     );
-}
-
-export function useExos() {
-    const context = useContext(ExoContext);
-    if (context === undefined) {
-        throw new Error('useExos must be used within an ExoProvider');
-    }
-    return context;
 }

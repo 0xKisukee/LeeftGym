@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet, SafeAreaView, TextInput, FlatList, ScrollView, ActivityIndicator} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {router, useLocalSearchParams} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from "@react-navigation/native";
@@ -13,11 +13,11 @@ import {BodyText, SubTitle, Title} from "../../../components/StyledText";
 import {ScreenContainerLight} from "../../../components/ScreenContainerLight";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
-import {useExos} from "../../../contexts/ExoContext";
+import {ExoContext} from "../../../contexts/ExoContext";
 
 export default function Create() {
+    const { allExos, isLoading, error } = useContext(ExoContext);
     const { routineWorkout } = useLocalSearchParams();
-    const { allExos, isLoading, error } = useExos();
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
 
     const emptyWorkout = {

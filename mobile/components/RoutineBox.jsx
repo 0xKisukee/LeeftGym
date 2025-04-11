@@ -4,10 +4,11 @@ import ExerciseBox from "./boxes/ExerciseBox";
 import {BodyText, SubTitle, Title} from "./StyledText";
 import AppBtn from "./AppBtn";
 import {router} from "expo-router";
-import {useExos} from "../contexts/ExoContext";
+import {ExoContext} from "../contexts/ExoContext";
+import {useContext} from "react";
 
 export default function RoutineBox({workout, onMenuPress}) {
-    const {allExos} = useExos();
+    const { allExos, isLoading, error } = useContext(ExoContext);
 
     const getExoNameById = (exoId) => {
         const exo = allExos.find(exo => exo.id === exoId);

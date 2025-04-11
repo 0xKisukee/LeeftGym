@@ -1,15 +1,16 @@
 import "../../global.css";
 import {Container} from "../ScreenContainer";
 import {FlatList, Text, TextInput, View, ActivityIndicator} from "react-native";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import AppBtn from "../AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
 import {SubTitle, Title} from "../StyledText";
-import {useExos} from "../../contexts/ExoContext";
+import {ExoContext} from "../../contexts/ExoContext";
 
 export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
     const [exoName, setExoName] = useState("");
-    const { allExos, isLoading } = useExos();
+
+    const { allExos, isLoading, error } = useContext(ExoContext);
 
     const getExoNameById = (exoId) => {
         const exo = allExos.find(exo => exo.id === exoId);

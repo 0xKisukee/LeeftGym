@@ -1,13 +1,14 @@
 import "../../global.css";
 import {FlatList, Text, TextInput, View, ActivityIndicator} from "react-native";
 import SetBox from "./SetBox";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {BodyText, SubTitle} from "../StyledText";
-import {useExos} from "../../contexts/ExoContext";
+import {ExoContext} from "../../contexts/ExoContext";
 
 export default function ExerciseBox({exercise}) {
     const [exoName, setExoName] = useState("");
-    const { allExos, isLoading } = useExos();
+
+    const { allExos, isLoading, error } = useContext(ExoContext);
 
     const getExoNameById = (exoId) => {
         const exo = allExos.find(exo => exo.id === exoId);
