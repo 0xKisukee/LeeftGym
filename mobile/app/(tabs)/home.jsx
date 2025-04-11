@@ -8,6 +8,7 @@ import {getAll} from "../../api/workouts";
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
 import AppBtn from "../../components/AppBtn";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
+import pushWorkout from "../../api/pushWorkout";
 
 export default function Home() {
     const [userInfo, setUserInfo] = useState(null);
@@ -46,6 +47,17 @@ export default function Home() {
         fetchUser();
         fetchWorkouts();
     }, []);
+
+    const copyAsRoutine = async () => {
+        const routineWorkout = {
+            ...selectedWorkout,
+            is_routine: true,
+            started_at: null,
+            completed_at: null,
+        };
+        console.log(routineWorkout)
+        await pushWorkout(routineWorkout);
+    }
 
     // Handle like updates
     const handleLikeUpdate = (workoutId, updatedWorkout) => {
