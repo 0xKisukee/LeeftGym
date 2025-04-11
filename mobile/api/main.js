@@ -1,5 +1,6 @@
 import {BASE_URL, HEADERS} from './config';
-import {getValueFor} from './jwt';
+import {forget, getValueFor} from './jwt';
+import {router} from "expo-router";
 
 const getAuthHeaders = async () => {
     const jwtToken = await getValueFor("userJWT");
@@ -24,7 +25,12 @@ const request = async (endpoint, options = {}) => {
         if (!response.ok) {
             const error = new Error(`HTTP error! status: ${response.status}`);
             error.status = response.status;
-            console.log(error);
+            console.error(error);
+            if (error.status === 401) {
+                forget("userJWT")
+                console.log("Token expired, redirecting to login by failed request");
+                router.replace("/login");
+            }
             return await response.json();
         }
 
@@ -32,7 +38,6 @@ const request = async (endpoint, options = {}) => {
         return data;
     } catch (error) {
         console.error('API Request failed:', error);
-
     }
 }
 
