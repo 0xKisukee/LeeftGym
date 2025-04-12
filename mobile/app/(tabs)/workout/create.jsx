@@ -271,6 +271,7 @@ export default function Create() {
             <AppBtn
                 title="Annuler la séance"
                 handlePress={cancelWorkout}
+                type="delete"
             />
         </View>
     );

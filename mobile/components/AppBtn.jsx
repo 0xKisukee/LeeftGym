@@ -2,9 +2,9 @@ import "../global.css";
 import {SafeAreaView} from 'react-native';
 import {Text, TouchableOpacity} from "react-native";
 
-export default function AppBtn({className, title, handlePress}) {
+export default function AppBtn({className, title, handlePress, type}) {
     return (
-        <SafeAreaView className={`${className || ''} bg-primary py-12 px-60 rounded-lg my-2 max-w-100`}>
+        <SafeAreaView className={`${className || ''} ${type === 'delete' ? `bg-delete` : 'bg-primary'} py-12 px-60 rounded-lg my-2 max-w-100`}>
             <TouchableOpacity
                 onPress={handlePress}>
 

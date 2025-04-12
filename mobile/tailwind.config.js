@@ -12,6 +12,7 @@ module.exports = {
         background: "#101010",
         bgsec: "#232323",
         text: "#e6e6e6",
+        delete: "#ff645b",
       }
     },
   },

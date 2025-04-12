@@ -48,6 +48,7 @@ export default function Index() {
                         handleDeleteRoutine(routine.id);
                         closeBottomSheet();
                     }}
+                    type="delete"
                 />
             )
         });
