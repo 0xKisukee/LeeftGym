@@ -120,17 +120,11 @@ export default function CustomRestTime ({exoRestTime, onRestTimeChange}) {
                             </View>
                         </View>
                         
-                        <View className="flex-row justify-center">
-                            <AppBtn
-                                title="Annuler"
-                                handlePress={() => setModalVisible(false)}
-                                className="mr-2"
-                            />
-                            <AppBtn
-                                title="Valider"
-                                handlePress={() => setModalVisible(false)}
-                            />
-                        </View>
+                        <AppBtn
+                            className="mx-auto"
+                            title="Valider"
+                            handlePress={() => setModalVisible(false)}
+                        />
                     </View>
                 </View>
             </Modal>
