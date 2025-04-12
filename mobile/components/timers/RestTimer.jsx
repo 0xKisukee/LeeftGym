@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import {BodyText, Title} from "../StyledText";
+import {BodyText, Title, SubTitle} from "../StyledText";
 
 // Fonction pour formater le temps en HH:MM:SS
 function formatTime(seconds) {
@@ -62,12 +62,12 @@ export default function RestTimer({ restDuration = 120, trigger }) {
     }
 
     return (
-        <View className="flex-row justify-center items-center">
+        <View className="flex-row justify-center items-center my-2" style={{ gap: 12 }}>
             <TouchableOpacity 
                 className="bg-red-500 p-2 rounded-lg"
                 onPress={() => adjustTime(-15)}
             >
-                <BodyText>-15</BodyText>
+                <SubTitle>-15</SubTitle>
             </TouchableOpacity>
 
             <Title>{formatTime(endTimestamp - currentTimestamp)}</Title>
@@ -76,14 +76,14 @@ export default function RestTimer({ restDuration = 120, trigger }) {
                 className="bg-green-500 p-2 rounded-lg"
                 onPress={() => adjustTime(15)}
             >
-                <BodyText>+15</BodyText>
+                <SubTitle>+15</SubTitle>
             </TouchableOpacity>
 
             <TouchableOpacity 
                 className="bg-green-500 p-2 rounded-lg"
                 onPress={skipRest}
             >
-                <BodyText>Passer</BodyText>
+                <SubTitle>Passer</SubTitle>
             </TouchableOpacity>
         </View>
     );
