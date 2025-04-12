@@ -22,9 +22,11 @@ export async function pushWorkout(workout) {
 
 export async function getWorkouts() {
     try {
-        return await get("/workouts");
+        const response = await get("/workouts");
+        return response || [];
     } catch (error) {
-        alert(error);
+        console.error("Error fetching workouts:", error);
+        return [];
     }
 }
 
