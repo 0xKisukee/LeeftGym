@@ -60,7 +60,7 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
 
     return (
             <View className="bg-bgsec rounded-lg mb-4 overflow-hidden p-4">
-                <View className="flex-row justify-between mb-2">
+                <View className="flex-row justify-between items-center mb-2">
                     <View className="flex-row items-center">
                         <BodyText className="font-bold">{workout.User?.username || 'Anonymous'}</BodyText>
                         <BodyText className="ml-2">
@@ -68,7 +68,7 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
                         </BodyText>
                     </View>
                     <TouchableOpacity
-                        className="mr-4"
+                        className="mr-4 -mt-2"
                         onPress={onMenuPress}
                     >
                         <Title>...</Title>
