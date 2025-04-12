@@ -1,4 +1,4 @@
-import {Text, View, SafeAreaView, TextInput, FlatList, ScrollView, ActivityIndicator} from "react-native";
+import {View, SafeAreaView, TextInput, FlatList, ScrollView, ActivityIndicator} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {router, useLocalSearchParams} from "expo-router";
@@ -13,6 +13,7 @@ import {ScreenContainerLight} from "../../../components/ScreenContainerLight";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
 import {ExoContext} from "../../../contexts/ExoContext";
+import {getExoRestTime, updateExoRestTime} from "../../../api/restTimes";
 
 export default function Create() {
     const { allExos, isLoading, error } = useContext(ExoContext);
@@ -90,7 +91,7 @@ export default function Create() {
         };
 
         initializeWorkout();
-    }, [routineWorkout]);
+    }, [routineWorkout]); // maybe can remove dependency
 
     // Retrieve workout data from AsyncStorage on each screen focus
     useEffect(() => {
@@ -108,7 +109,7 @@ export default function Create() {
         };
 
         loadWorkoutData();
-    }, [isFocused]);
+    }, [isFocused]); // maybe can remove dependency
 
     // Save workout data to AsyncStorage whenever it changes
     useEffect(() => {
@@ -155,9 +156,13 @@ export default function Create() {
     const addExercise = async (exoId) => {
         const defaultOrder = createdWorkout.Exercises.length + 1;
 
+        const defaultRestTime = await getExoRestTime(exoId);
+
+        console.log("This is the rest time for the exercise:", defaultRestTime);
+
         const newExercise = {
             order: defaultOrder,
-            rest_time: 180, // HERE IT SHOULD SET THE USER PERSONAL VALUE, DEFINED IN LOCALSTORAGE OR DATABASE
+            rest_time: defaultRestTime,
             exo_id: exoId,
             Sets: [],
         };

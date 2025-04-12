@@ -6,6 +6,7 @@ import AppBtn from "../AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
 import {SubTitle, Title} from "../StyledText";
 import {ExoContext} from "../../contexts/ExoContext";
+import CustomRestTime from "../CustomRestTime";
 
 export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
     const [exoName, setExoName] = useState("");
@@ -46,6 +47,10 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
                 className="text-text h-12 px-2 my-1 w-full bg-bgsec rounded-lg"
                 placeholder="Plus tard vous pourrez ajouter des notes ici"
                 placeholderTextColor="#a8a8a8"
+            />
+
+            <CustomRestTime
+                exoRestTime={exercise.rest_time}
             />
 
             <View

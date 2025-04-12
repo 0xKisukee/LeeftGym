@@ -8,8 +8,9 @@ import {pushWorkout} from "../../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {BodyText, Title} from "../../../components/StyledText";
+import {updateExoRestTime} from "../../../api/restTimes";
 
-export default function Create() {
+export default function Confirm() {
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
 
     const emptyWorkout = {
@@ -28,6 +29,7 @@ export default function Create() {
         const loadWorkoutData = async () => {
             try {
                 const savedData = await AsyncStorage.getItem('workoutData');
+                console.log(savedData);
                 if (savedData !== null) {
                     setCreatedWorkout(JSON.parse(savedData));
                 }
@@ -50,6 +52,12 @@ export default function Create() {
 
         // Delete workout from local storage
         await AsyncStorage.removeItem('workoutData');
+
+        // Update rest times
+        for (const exercise of createdWorkout.Exercises) {
+            console.log(exercise.rest_time)
+            await updateExoRestTime(exercise.exo_id, exercise.rest_time);
+        }
 
         // Clear fields
         setCreatedWorkout(emptyWorkout);
