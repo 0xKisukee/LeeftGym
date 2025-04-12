@@ -2,12 +2,13 @@ import React, {useContext, useState} from 'react';
 import {View, Text, TouchableOpacity, Image, Alert, FlatList} from 'react-native';
 import { router } from 'expo-router';
 import { likeWorkout } from '../../api/workouts';
-import { getValueFor } from '../../api/jwt';
 import {LikeBtn} from '../icons/LikeBtn';
 import {BodyText, SubTitle, Title} from "../StyledText";
 import ExerciseBox from "./ExerciseBox";
 import {ExoContext} from "../../contexts/ExoContext";
 import {UserContext} from "../../contexts/UserContext";
+import {ReleeftBtn} from "../icons/ReleeftBtn";
+import {CommentBtn} from "../icons/CommentBtn";
 
 export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
     const {userInfos} = useContext(UserContext);
@@ -58,6 +59,14 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
         }
     };
 
+    const handleReleeft = () => {
+        console.info('Releeft');
+    }
+
+    const handleComment = () => {
+        console.info("Comment");
+    }
+
     return (
             <View className="bg-bgsec rounded-lg mb-4 overflow-hidden p-4">
                 <View className="flex-row justify-between items-center mb-2">
@@ -88,19 +97,32 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
                     )}
                 />
 
-                <View className="flex-row items-center justify-between">
-                    <LikeBtn
-                        handleLike={handleLike}
-                        hasLiked={localHasLiked}
-                    />
-
-                    <View className="flex-row items-center">
-                        <Text className="text-gray-500 mr-2 right">
-                            {localLikesCount} likes
+                <View className="flex-row items-center justify-between mx-4">
+                    <View className="flex-row">
+                        <LikeBtn
+                            handleLike={handleLike}
+                            hasLiked={localHasLiked}
+                        />
+                        <Text className="text-gray-300 ml-2 mt-3">
+                            {localLikesCount}
                         </Text>
+                    </View>
 
-                        <Text className="text-gray-500">
-                            {workout.comments || 0} comments
+                    <View className="flex-row">
+                        <ReleeftBtn
+                            handleReleeft={handleReleeft}
+                        />
+                        <Text className="text-gray-300 ml-2 mt-3">
+                            231
+                        </Text>
+                    </View>
+
+                    <View className="flex-row">
+                        <CommentBtn
+                            handleComment={handleComment}
+                        />
+                        <Text className="text-gray-300 ml-2 mt-3">
+                            {workout.comments || 0}
                         </Text>
                     </View>
                 </View>
