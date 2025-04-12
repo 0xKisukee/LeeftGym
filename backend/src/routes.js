@@ -6,6 +6,7 @@ const exoController = require('./controllers/exo.controller');
 const workoutController = require('./controllers/workout.controller');
 const exerciseController = require('./controllers/exercise.controller');
 const setController = require('./controllers/set.controller');
+const commentController = require('./controllers/comment.controller');
 
 // Auth routes
 
@@ -61,6 +62,23 @@ router.delete(
     '/workouts/:id',
     auth.authenticateJwt,
     workoutController.destroy,
+);
+
+// Workout Comments
+router.get(
+    '/workouts/:workout_id/comments',
+    auth.authenticateJwt,
+    commentController.index,
+);
+router.post(
+    '/workouts/:workout_id/comments',
+    auth.authenticateJwt,
+    commentController.store,
+);
+router.delete(
+    '/comments/:id',
+    auth.authenticateJwt,
+    commentController.destroy,
 );
 
 // Exercises

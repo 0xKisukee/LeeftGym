@@ -268,7 +268,7 @@ async function deleteWorkout(userId, workoutId) {
     // Delete the workout (this will cascade delete related exercises and sets)
     await workout.destroy();
     
-    return { success: true, message: 'Workout deleted successfully' };
+    return { message: 'Workout deleted successfully' };
 }
 
 module.exports = {
