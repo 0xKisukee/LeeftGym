@@ -4,7 +4,7 @@ import {forget, getValueFor} from "../../api/jwt";
 import {router} from "expo-router";
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {WorkoutBox} from "../../components/boxes/WorkoutBox";
-import {getAll, getWorkouts} from "../../api/workouts";
+import {deleteWorkout, getAll, getWorkouts} from "../../api/workouts";
 import {useIsFocused} from "@react-navigation/native";
 import {me} from "../../api/login";
 import {SubTitle, Title} from "../../components/StyledText";
@@ -66,6 +66,18 @@ export default function Profile() {
         await pushWorkout(routineWorkout);
     }
 
+    const handleDeleteWorkout = async (id) => {
+        try {
+            console.log(id)
+            await deleteWorkout(id);
+            setWorkouts(prevWorkouts =>
+                prevWorkouts.filter(workout => workout.id !== id)
+            );
+        } catch (error) {
+            console.error('Error deleting routine:', error);
+        }
+    };
+
     // Handle like updates
     const handleLikeUpdate = (workoutId, updatedWorkout) => {
         setWorkouts(prevWorkouts =>
@@ -88,14 +100,25 @@ export default function Profile() {
             title: "Options du workout",
             snapPoints: ['25%'],
             content: (
-                <AppBtn
-                    className="mx-5"
-                    title="Enregistrer comme routine"
-                    handlePress={() => {
-                        closeBottomSheet();
-                        copyAsRoutine(workout);
-                    }}
-                />
+                <>
+                    <AppBtn
+                        className="mx-5"
+                        title="Enregistrer comme routine"
+                        handlePress={() => {
+                            closeBottomSheet();
+                            copyAsRoutine(workout);
+                        }}
+                    />
+                    <AppBtn
+                        className="mx-5"
+                        title="Supprimer l'entraînement"
+                        handlePress={() => {
+                            closeBottomSheet();
+                            handleDeleteWorkout(workout.id);
+                        }}
+                        type="delete"
+                    />
+                </>
             )
         });
     };
