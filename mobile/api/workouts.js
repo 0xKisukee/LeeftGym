@@ -1,4 +1,4 @@
-import { get, post } from "./main";
+import { get, post, del } from "./main";
 
 export async function pushWorkout(workout) {
     try {
@@ -49,6 +49,15 @@ export async function likeWorkout(workoutId) {
         return await post(`/workouts/${workoutId}/likes`);
     } catch (error) {
         console.error("Error liking workout:", error);
+        throw error;
+    }
+}
+
+export async function deleteWorkout(id) {
+    try {
+        return await del(`/workouts/${id}`);
+    } catch (error) {
+        console.error("Error deleting workout:", error);
         throw error;
     }
 }

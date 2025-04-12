@@ -51,3 +51,9 @@ export const post = async (endpoint, body) => {
         body: JSON.stringify(body),
     });
 }
+
+export const del = async (endpoint) => {
+    return request(endpoint, {
+        method: 'DELETE',
+    });
+}

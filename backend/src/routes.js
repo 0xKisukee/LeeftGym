@@ -57,6 +57,11 @@ router.get(
     auth.authenticateJwt,
     workoutController.show,
 );
+router.delete(
+    '/workouts/:id',
+    auth.authenticateJwt,
+    workoutController.destroy,
+);
 
 // Exercises
 

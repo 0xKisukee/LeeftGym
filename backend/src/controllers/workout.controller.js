@@ -37,6 +37,11 @@ const like = catchAsync(async (req, res) => {
     res.status(254).json(result);
 });
 
+const destroy = catchAsync(async (req, res) => {
+    const result = await workoutService.deleteWorkout(req.auth.userId, req.params.id);
+    res.status(254).json(result);
+});
+
 module.exports = {
     index,
     show,
@@ -45,4 +50,5 @@ module.exports = {
     getAll,
     like,
     storeFull,
+    destroy,
 };

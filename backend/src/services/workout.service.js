@@ -254,6 +254,23 @@ async function like(userId, workoutId) {
     return updatedWorkout;
 }
 
+async function deleteWorkout(userId, workoutId) {
+    const workout = await models.Workout.findByPk(workoutId);
+    if (!workout) {
+        throw new AppError('Workout not found', 404);
+    }
+
+    // Check if the user owns this workout
+    if (workout.user_id !== userId) {
+        throw new AppError('You do not have permission to delete this workout', 403);
+    }
+
+    // Delete the workout (this will cascade delete related exercises and sets)
+    await workout.destroy();
+    
+    return { success: true, message: 'Workout deleted successfully' };
+}
+
 module.exports = {
     index,
     show,
@@ -262,4 +279,5 @@ module.exports = {
     getRoutines,
     getAll,
     like,
+    deleteWorkout,
 };
