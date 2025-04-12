@@ -232,6 +232,7 @@ export default function Create() {
     const openExerciseSelectionSheet = () => {
         openBottomSheet({
             title: "Workout - Choose Exo",
+            snapPoints: ['75%'],
             content: (
                 <>
                     <BodyText className="mb-2">Choisissez un exercice à ajouter à votre workout</BodyText>

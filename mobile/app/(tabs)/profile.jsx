@@ -56,14 +56,13 @@ export default function Profile() {
         fetchWorkouts();
     }, []); // I removed "isFocused", this should be refreshed only when needed
 
-    const copyAsRoutine = async () => {
+    const copyAsRoutine = async (workoutToCopy) => {
         const routineWorkout = {
-            ...selectedWorkout,
+            ...workoutToCopy,
             is_routine: true,
             started_at: null,
             completed_at: null,
         };
-        console.log(routineWorkout)
         await pushWorkout(routineWorkout);
     }
 
@@ -87,13 +86,14 @@ export default function Profile() {
         setSelectedWorkout(workout);
         openBottomSheet({
             title: "Options du workout",
+            snapPoints: ['25%'],
             content: (
                 <AppBtn
                     className="mx-5"
                     title="Enregistrer comme routine"
                     handlePress={() => {
-                        copyAsRoutine();
                         closeBottomSheet();
+                        copyAsRoutine(workout);
                     }}
                 />
             )

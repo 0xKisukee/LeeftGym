@@ -10,9 +10,9 @@ export function BottomSheetProvider({ children }) {
   const [isVisible, setIsVisible] = useState(false);
   const [content, setContent] = useState(null);
   const [title, setTitle] = useState('');
-  
+  const [snapPoints, setSnapPoints] = useState(['50%', '90%']);
+
   const sheetRef = useRef(null);
-  const snapPoints = useMemo(() => ['50%', '90%'], []);
 
   const renderBackdrop = useCallback(
     (props) => (
@@ -37,6 +37,7 @@ export function BottomSheetProvider({ children }) {
     setContent(options.content);
     setTitle(options.title || '');
     setIsVisible(true);
+    setSnapPoints(options.snapPoints || ['50%', '90%']);
     sheetRef.current?.snapToIndex(0);
   }, []);
 
@@ -55,6 +56,7 @@ export function BottomSheetProvider({ children }) {
             ref={sheetRef}
             index={0}
             snapPoints={snapPoints}
+            enableDynamicSizing={false}
             enablePanDownToClose={true}
             backdropComponent={renderBackdrop}
             backgroundStyle={{

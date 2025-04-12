@@ -1,24 +1,56 @@
 import {Text, View, SafeAreaView, TextInput, FlatList} from "react-native";
 import AppBtn from "../../../components/AppBtn";
 import FormField from "../../../components/FormField";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused} from "@react-navigation/native";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {SubTitle, Title} from "../../../components/StyledText";
-import {getRoutines} from "../../../api/workouts";
+import {getRoutines, deleteWorkout} from "../../../api/workouts";
 import RoutineBox from "../../../components/RoutineBox";
+import {BottomSheetContext} from "../../../contexts/BottomSheetContext";
 
 export default function Index() {
     const [pendingWorkout, setPendingWorkout] = useState(false);
     const [routinesList, setRoutinesList] = useState([]);
+    const [selectedRoutine, setSelectedRoutine] = useState(null);
+    const { openBottomSheet, closeBottomSheet } = useContext(BottomSheetContext);
 
     const isFocused = useIsFocused();
 
     const fetchRoutines = async () => {
-        const workouts = await getRoutines(); // Fetch workouts with token
-        setRoutinesList(workouts); // Update state with workouts
+        const workouts = await getRoutines();
+        setRoutinesList(workouts);
+    };
+
+    const handleDeleteRoutine = async (id) => {
+        try {
+            await deleteWorkout(id);
+            setRoutinesList(prevRoutines => 
+                prevRoutines.filter(routine => routine.id !== id)
+            );
+        } catch (error) {
+            console.error('Error deleting routine:', error);
+        }
+    };
+
+    const openRoutineOptionsSheet = (routine) => {
+        setSelectedRoutine(routine);
+        openBottomSheet({
+            title: "Options de la routine",
+            snapPoints: ['25%'],
+            content: (
+                <AppBtn
+                    className="mx-5"
+                    title="Supprimer la routine"
+                    handlePress={() => {
+                        handleDeleteRoutine(routine.id);
+                        closeBottomSheet();
+                    }}
+                />
+            )
+        });
     };
 
     const loadWorkoutData = async () => {
@@ -58,16 +90,14 @@ export default function Index() {
                 />
             }
 
-            <SubTitle className="mt-5">Vos Routines</SubTitle>
+            <SubTitle className="mt-5 mb-4">Vos Routines</SubTitle>
 
             <FlatList
                 data={routinesList}
                 renderItem={({ item }) => (
                     <RoutineBox
                         workout={item}
-                        onMenuPress={() => {
-                            console.log("routine edit button pressed");
-                        }}
+                        onMenuPress={() => openRoutineOptionsSheet(item)}
                     />
                 )}
             />
