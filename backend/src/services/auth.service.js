@@ -42,7 +42,7 @@ async function login(data) {
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        throw new AppError('Wrong password', 401);
+        throw new AppError('Wrong password', 400);
     }
 
     // Generate JWT token with user infos
