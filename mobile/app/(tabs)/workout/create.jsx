@@ -279,6 +279,8 @@ export default function Create() {
         );
     }
 
+    const sortedExercises = [...createdWorkout.Exercises].sort((a, b) => a.order - b.order);
+
     return (
         <GestureHandlerRootView>
             <ScreenContainerLight>
@@ -290,7 +292,7 @@ export default function Create() {
                 </View>
 
                 <FlatList
-                    data={createdWorkout.Exercises}
+                    data={sortedExercises}
                     renderItem={renderExercise}
                     ListFooterComponent={renderFooter}
                 />
