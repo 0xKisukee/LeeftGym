@@ -1,14 +1,14 @@
 import {ActivityIndicator, FlatList, RefreshControl, Text, View} from "react-native";
 import { ScreenContainer } from "../../components/ScreenContainer";
 import { Title } from "../../components/StyledText";
-import React, {useState, useEffect, useRef, useMemo, useCallback, useContext} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {WorkoutBox} from "../../components/boxes/WorkoutBox";
-import {getAll} from "../../api/workouts";
-import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
+import {deleteWorkout, getAll} from "../../api/workouts";
 import AppBtn from "../../components/AppBtn";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {pushWorkout} from "../../api/workouts";
 import {UserContext} from "../../contexts/UserContext";
+import {BottomSheetContext} from "../../contexts/BottomSheetContext";
 
 export default function Home() {
     const [workouts, setWorkouts] = useState([]);
@@ -18,6 +18,7 @@ export default function Home() {
     const [error, setError] = useState(null);
 
     const {userInfos} = useContext(UserContext);
+    const { openBottomSheet, closeBottomSheet } = useContext(BottomSheetContext);
 
     const emptyWorkout = {
         name: "",
@@ -43,16 +44,27 @@ export default function Home() {
         fetchWorkouts();
     }, []);
 
-    const copyAsRoutine = async () => {
+    const copyAsRoutine = async (workoutToCopy) => {
         const routineWorkout = {
-            ...selectedWorkout,
+            ...workoutToCopy,
             is_routine: true,
             started_at: null,
             completed_at: null,
         };
-        console.log(routineWorkout)
         await pushWorkout(routineWorkout);
     }
+
+    const handleDeleteWorkout = async (id) => {
+        try {
+            console.log(id)
+            await deleteWorkout(id);
+            setWorkouts(prevWorkouts =>
+                prevWorkouts.filter(workout => workout.id !== id)
+            );
+        } catch (error) {
+            console.error('Error deleting routine:', error);
+        }
+    };
 
     // Handle like updates
     const handleLikeUpdate = (workoutId, updatedWorkout) => {
@@ -69,32 +81,37 @@ export default function Home() {
         setRefreshing(false);
     };
 
-
-
-    // Bottom sheet //
-    const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => ["20%", "50%", "90%"], []);
-
-    // Bottom sheet callbacks
-    const handleClosePress = useCallback(() => {
-        sheetRef.current?.close();
-    }, []);
-    const handleSnapPress = useCallback((index) => {
-        sheetRef.current?.snapToIndex(index);
-    }, []);
-
-    // Render backdrop component
-    const renderBackdrop = useCallback(
-        (props) => (
-            <BottomSheetBackdrop
-                {...props}
-                disappearsOnIndex={-1}
-                appearsOnIndex={0}
-                pressBehavior="close"
-            />
-        ),
-        []
-    );
+    // Function to open the workout options bottom sheet
+    const openWorkoutOptionsSheet = (workout) => {
+        setSelectedWorkout(workout);
+        openBottomSheet({
+            title: "Options du workout",
+            snapPoints: ['25%'],
+            content: (
+                <>
+                    <AppBtn
+                        className="mx-5"
+                        title="Enregistrer comme routine"
+                        handlePress={() => {
+                            closeBottomSheet();
+                            copyAsRoutine(workout);
+                        }}
+                    />
+                    { (workout.User.id === userInfos.userId) &&
+                        <AppBtn
+                            className="mx-5"
+                            title="Supprimer l'entraînement"
+                            handlePress={() => {
+                                closeBottomSheet();
+                                handleDeleteWorkout(workout.id);
+                            }}
+                            type="delete"
+                        />
+                    }
+                </>
+            )
+        });
+    };
 
     if (loading && !refreshing) {
         return (
@@ -116,10 +133,7 @@ export default function Home() {
                             workout={item}
                             onLikeUpdate={handleLikeUpdate}
                             userInfo={userInfos}
-                            onMenuPress={() => {
-                                setSelectedWorkout(item);
-                                handleSnapPress(0)
-                            }}
+                            onMenuPress={() => openWorkoutOptionsSheet(item)}
                         />
                     )}
                     keyExtractor={(item) => item.id}
@@ -135,32 +149,6 @@ export default function Home() {
                         </View>
                     }
                 />
-
-
-
-                <BottomSheet
-                    backgroundStyle={{backgroundColor: "#232323"}}
-                    ref={sheetRef}
-                    index={-1}
-                    snapPoints={snapPoints}
-                    enableDynamicSizing={false}
-                    backdropComponent={renderBackdrop}
-                    enablePanDownToClose={true}
-                >
-                    <BottomSheetView>
-
-                        <AppBtn
-                            className="mx-5"
-                            title="Enregistrer la routine"
-                            handlePress={() => {
-                                copyAsRoutine()
-                                handleClosePress()
-                            }}
-                        />
-
-                    </BottomSheetView>
-                </BottomSheet>
-
             </ScreenContainer>
         </GestureHandlerRootView>
     );
