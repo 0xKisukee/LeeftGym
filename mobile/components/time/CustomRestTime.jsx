@@ -1,7 +1,7 @@
 import {StyleSheet, TouchableOpacity, View, Modal, Text} from "react-native";
-import {BodyText} from "./StyledText";
+import {BodyText} from "../StyledText";
 import {useState} from "react";
-import AppBtn from "./AppBtn";
+import AppBtn from "../AppBtn";
 
 // Fonction pour formater le temps en MM:SS
 function formatTime(seconds) {

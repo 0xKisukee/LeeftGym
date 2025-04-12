@@ -1,9 +1,9 @@
-import "../global.css";
+import "../../global.css";
 import {FlatList, Text, TouchableOpacity, View} from "react-native";
-import {BodyText, SubTitle, Title} from "./StyledText";
-import AppBtn from "./AppBtn";
+import {BodyText, SubTitle, Title} from "../StyledText";
+import AppBtn from "../AppBtn";
 import {router} from "expo-router";
-import {ExoContext} from "../contexts/ExoContext";
+import {ExoContext} from "../../contexts/ExoContext";
 import {useContext} from "react";
 
 export default function RoutineBox({workout, onMenuPress}) {
