@@ -4,13 +4,16 @@ import {router} from "expo-router";
 import BetaBar from "../../components/BetaBar";
 import AppBtn from "../../components/AppBtn";
 import FormField from "../../components/FormField";
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {login} from "../../api/login"
 import {save} from "../../api/jwt";
 import {containers, typography} from "../../styles/theme";
 import {Title, BodyText} from "../../components/StyledText";
+import { UserContext } from "../../contexts/UserContext";
 
 export default function Login() {
+    const { setIsAuth } = useContext(UserContext);
+    
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -33,6 +36,7 @@ export default function Login() {
             //redirect to index=>profile
             //but for now directly redirect to profile
             router.replace("/profile");
+            setIsAuth(true);
         }
     }
 

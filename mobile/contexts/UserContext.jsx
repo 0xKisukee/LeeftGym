@@ -9,41 +9,42 @@ export function UserProvider({ children }) {
     const [userInfos, setUserInfos] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        async function fetchUser() {
-            console.log("Fetching user");
-            setIsLoading(true);
+    const refreshUser = async () => {
+        console.log("Fetching user");
+        setIsLoading(true);
 
-            const token = await getValueFor("userJWT");
-            console.log("starting fetching user in user context");
+        const token = await getValueFor("userJWT");
+        console.log("starting fetching user in user context");
 
-            if (!token) {
-                console.log("no token - no auth");
-                setIsAuth(false);
-                setIsLoading(false);
-                return
-            }
-
-            console.log("now trying to call me() function from user context");
-            const data = await me();
-
-            if (!data.userId) {
-                console.log("wrong token - probably expired");
-                setIsAuth(false);
-                setIsLoading(false);
-                return;
-            }
-
-            console.log("user infos caught by user context:", data);
-            setUserInfos(data);
-            setIsAuth(true);
+        if (!token) {
+            console.log("no token - no auth");
+            setIsAuth(false);
             setIsLoading(false);
+            return;
         }
-        fetchUser();
-    }, []);
+
+        console.log("now trying to call me() function from user context");
+        const data = await me();
+
+        if (!data.userId) {
+            console.log("wrong token - probably expired");
+            setIsAuth(false);
+            setIsLoading(false);
+            return;
+        }
+
+        console.log("user infos caught by user context:", data);
+        setUserInfos(data);
+        setIsAuth(true);
+        setIsLoading(false);
+    };
+
+    useEffect(() => {
+        refreshUser();
+    }, [isAuth]);
 
     return (
-        <UserContext.Provider value={{ userInfos, setUserInfos, isAuth, isLoading }}>
+        <UserContext.Provider value={{ userInfos, setUserInfos, isAuth, setIsAuth, isLoading, refreshUser }}>
             {children}
         </UserContext.Provider>
     );
