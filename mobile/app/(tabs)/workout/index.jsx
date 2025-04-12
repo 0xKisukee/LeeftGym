@@ -8,7 +8,7 @@ import {useIsFocused} from "@react-navigation/native";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {SubTitle, Title} from "../../../components/StyledText";
 import {getRoutines, deleteWorkout} from "../../../api/workouts";
-import RoutineBox from "../../../components/RoutineBox";
+import RoutineBox from "../../../components/boxes/RoutineBox";
 import {BottomSheetContext} from "../../../contexts/BottomSheetContext";
 
 export default function Index() {

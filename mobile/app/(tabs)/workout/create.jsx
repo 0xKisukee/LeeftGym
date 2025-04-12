@@ -4,9 +4,9 @@ import {useCallback, useContext, useEffect, useMemo, useRef, useState} from "rea
 import {router, useLocalSearchParams} from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from "@react-navigation/native";
-import WorkoutTimer from "../../../components/timers/WorkoutTimer";
+import WorkoutTimer from "../../../components/time/WorkoutTimer";
 import ExerciseBoxCreate from "../../../components/boxes/ExerciseBoxCreate";
-import RestTimer from "../../../components/timers/RestTimer";
+import RestTimer from "../../../components/time/RestTimer";
 import {ScreenContainer} from "../../../components/ScreenContainer";
 import {BodyText, SubTitle, Title} from "../../../components/StyledText";
 import {ScreenContainerLight} from "../../../components/ScreenContainerLight";

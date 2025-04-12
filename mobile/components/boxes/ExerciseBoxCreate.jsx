@@ -6,7 +6,7 @@ import AppBtn from "../AppBtn";
 import SetBoxCreate from "./SetBoxCreate";
 import {SubTitle, Title} from "../StyledText";
 import {ExoContext} from "../../contexts/ExoContext";
-import CustomRestTime from "../CustomRestTime";
+import CustomRestTime from "../time/CustomRestTime";
 
 export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted, onRestTimeChange}) {
     const [exoName, setExoName] = useState("");
