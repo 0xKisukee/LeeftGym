@@ -10,9 +10,9 @@ import {me} from "../../api/login";
 import {SubTitle, Title} from "../../components/StyledText";
 import {ScreenContainer} from "../../components/ScreenContainer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import {pushWorkout} from "../../api/workouts";
 import {UserContext} from "../../contexts/UserContext";
+import {BottomSheetContext} from "../../contexts/BottomSheetContext";
 
 export default function Profile() {
     const [workouts, setWorkouts] = useState([]);
@@ -22,6 +22,7 @@ export default function Profile() {
     const [error, setError] = useState(null);
 
     const {userInfos} = useContext(UserContext);
+    const { openBottomSheet, closeBottomSheet } = useContext(BottomSheetContext);
 
     const isFocused = useIsFocused();
 
@@ -81,31 +82,23 @@ export default function Profile() {
         setRefreshing(false);
     };
 
-
-    // Bottom sheet //
-    const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => ["20%", "50%", "90%"], []);
-
-    // Bottom sheet callbacks
-    const handleClosePress = useCallback(() => {
-        sheetRef.current?.close();
-    }, []);
-    const handleSnapPress = useCallback((index) => {
-        sheetRef.current?.snapToIndex(index);
-    }, []);
-    
-    // Render backdrop component
-    const renderBackdrop = useCallback(
-        (props) => (
-            <BottomSheetBackdrop
-                {...props}
-                disappearsOnIndex={-1}
-                appearsOnIndex={0}
-                pressBehavior="close"
-            />
-        ),
-        []
-    );
+    // Function to open the workout options bottom sheet
+    const openWorkoutOptionsSheet = (workout) => {
+        setSelectedWorkout(workout);
+        openBottomSheet({
+            title: "Options du workout",
+            content: (
+                <AppBtn
+                    className="mx-5"
+                    title="Enregistrer comme routine"
+                    handlePress={() => {
+                        copyAsRoutine();
+                        closeBottomSheet();
+                    }}
+                />
+            )
+        });
+    };
 
     if ((loading && !refreshing) || !userInfos) {
         return (
@@ -134,10 +127,7 @@ export default function Profile() {
                             workout={item}
                             onLikeUpdate={handleLikeUpdate}
                             userInfo={userInfos}
-                            onMenuPress={() => {
-                                setSelectedWorkout(item);
-                                handleSnapPress(0)
-                            }}
+                            onMenuPress={() => openWorkoutOptionsSheet(item)}
                         />
                     )}
                     keyExtractor={(item) => item.id}
@@ -148,30 +138,6 @@ export default function Profile() {
                         />
                     }
                 />
-
-                <BottomSheet
-                    backgroundStyle={{backgroundColor: "#232323"}}
-                    ref={sheetRef}
-                    index={-1}
-                    snapPoints={snapPoints}
-                    enableDynamicSizing={false}
-                    backdropComponent={renderBackdrop}
-                    enablePanDownToClose={true}
-                >
-                    <BottomSheetView>
-
-                        <AppBtn
-                            className="mx-5"
-                            title="Enregistrer la routine"
-                            handlePress={() => {
-                                copyAsRoutine()
-                                handleClosePress()
-                            }}
-                        />
-
-                    </BottomSheetView>
-                </BottomSheet>
-
             </ScreenContainer>
         </GestureHandlerRootView>
     );

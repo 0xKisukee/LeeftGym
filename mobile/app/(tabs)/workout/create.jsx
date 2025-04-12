@@ -11,12 +11,13 @@ import {ScreenContainer} from "../../../components/ScreenContainer";
 import {BodyText, SubTitle, Title} from "../../../components/StyledText";
 import {ScreenContainerLight} from "../../../components/ScreenContainerLight";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
 import {ExoContext} from "../../../contexts/ExoContext";
 import {getExoRestTime, updateExoRestTime} from "../../../api/restTimes";
+import {BottomSheetContext} from "../../../contexts/BottomSheetContext";
 
 export default function Create() {
     const { allExos, isLoading, error } = useContext(ExoContext);
+    const { openBottomSheet, closeBottomSheet } = useContext(BottomSheetContext);
     const { routineWorkout } = useLocalSearchParams();
     const isFocused = useIsFocused(); // Check if screen is opened to refresh workouts
 
@@ -32,31 +33,6 @@ export default function Create() {
     const [createdWorkout, setCreatedWorkout] = useState(emptyWorkout);
     const [restTimer, setRestTimer] = useState(0);
     const [restTrigger, setRestTrigger] = useState(0);
-
-    // Bottom sheet
-    const sheetRef = useRef(null);
-    const snapPoints = useMemo(() => ["50%", "90%"], []);
-
-    // Bottom sheet callbacks
-    const handleClosePress = useCallback(() => {
-        sheetRef.current?.close();
-    }, []);
-    const handleSnapPress = useCallback((index) => {
-        sheetRef.current?.snapToIndex(index);
-    }, []);
-
-    // Render backdrop component
-    const renderBackdrop = useCallback(
-        (props) => (
-            <BottomSheetBackdrop
-                {...props}
-                disappearsOnIndex={-1}
-                appearsOnIndex={0}
-                pressBehavior="close"
-            />
-        ),
-        []
-    );
 
     // Initialize workout data
     useEffect(() => {
@@ -217,7 +193,7 @@ export default function Create() {
             title={exo.name}
             handlePress={() => {
                 addExercise(exo.id);
-                handleClosePress();
+                closeBottomSheet();
             }}
         />
 
@@ -252,12 +228,40 @@ export default function Create() {
         />
     );
 
+    // Function to open the exercise selection bottom sheet
+    const openExerciseSelectionSheet = () => {
+        openBottomSheet({
+            title: "Workout - Choose Exo",
+            content: (
+                <>
+                    <BodyText className="mb-2">Choisissez un exercice à ajouter à votre workout</BodyText>
+                    <TextInput
+                        className="h-12 px-2 my-1 w-full bg-tertiary rounded-lg"
+                        placeholder="Recherchez un exercice (fonctionnalité à venir)"
+                        placeholderTextColor="#a8a8a8"
+                    />
+
+                    {isLoading ? (
+                        <View className="flex-1 justify-center items-center">
+                            <ActivityIndicator size="large" color="#0000ff" />
+                        </View>
+                    ) : (
+                        <FlatList
+                            data={allExos}
+                            renderItem={({ item }) => (exoBtn(item))}
+                        />
+                    )}
+                </>
+            )
+        });
+    };
+
     // Boutons à afficher en bas de la liste
     const renderFooter = () => (
         <View className="px-5">
             <AppBtn
                 title="Ajouter un exercice"
-                handlePress={() => handleSnapPress(1)} // Example exercise ID
+                handlePress={openExerciseSelectionSheet}
             />
             <AppBtn
                 title="Terminer la séance"
@@ -300,42 +304,6 @@ export default function Create() {
                     restDuration={restTimer}
                     trigger={restTrigger}
                 />
-
-                <BottomSheet
-                    backgroundStyle={{
-                        backgroundColor: "#232323",
-                    }}
-                    ref={sheetRef}
-                    index={-1}
-                    snapPoints={snapPoints}
-                    enableDynamicSizing={false}
-                    backdropComponent={renderBackdrop}
-                    enablePanDownToClose={true}
-                >
-                    <BottomSheetView className="px-4">
-
-                        <Title className="mb-3">Workout - Choose Exo</Title>
-                        <BodyText className="mb-2">Choisissez un exercice à ajouter à votre workout</BodyText>
-                        <TextInput
-                            className="h-12 px-2 my-1 w-full bg-tertiary rounded-lg"
-                            placeholder="Recherchez un exercice (fonctionnalité à venir)"
-                            placeholderTextColor="#a8a8a8"
-                        />
-
-                        {isLoading ? (
-                            <View className="flex-1 justify-center items-center">
-                                <ActivityIndicator size="large" color="#0000ff" />
-                            </View>
-                        ) : (
-                            <FlatList
-                                data={allExos}
-                                renderItem={({ item }) => (exoBtn(item))}
-                            />
-                        )}
-
-                    </BottomSheetView>
-                </BottomSheet>
-
             </ScreenContainerLight>
         </GestureHandlerRootView>
     );
