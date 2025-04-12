@@ -238,6 +238,17 @@ export default function Create() {
                 setRestTimer(item.rest_time || 120); // Default to 120 seconds if no rest time specified
                 setRestTrigger(prev => prev + 1); // Increment trigger to start rest timer
             }}
+            onRestTimeChange={(exerciseOrder, newRestTime) => {
+                const updatedWorkout = {
+                    ...createdWorkout,
+                    Exercises: createdWorkout.Exercises.map(exercise =>
+                        exercise.order === exerciseOrder 
+                            ? {...exercise, rest_time: newRestTime} 
+                            : exercise
+                    )
+                };
+                setCreatedWorkout(updatedWorkout);
+            }}
         />
     );
 

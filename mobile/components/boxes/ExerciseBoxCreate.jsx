@@ -8,7 +8,7 @@ import {SubTitle, Title} from "../StyledText";
 import {ExoContext} from "../../contexts/ExoContext";
 import CustomRestTime from "../CustomRestTime";
 
-export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted}) {
+export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSetCompleted, onRestTimeChange}) {
     const [exoName, setExoName] = useState("");
 
     const { allExos, isLoading, error } = useContext(ExoContext);
@@ -37,6 +37,12 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
         }
     };
 
+    const handleRestTimeChange = (newRestTime) => {
+        if (onRestTimeChange) {
+            onRestTimeChange(exercise.order, newRestTime);
+        }
+    };
+
     return (
         <View className="my-3 pb-5 border-b border-primary">
             <View className="flex-row items-center">
@@ -51,6 +57,7 @@ export default function ExerciseBoxCreate({exercise, onAddSet, onSetChange, onSe
 
             <CustomRestTime
                 exoRestTime={exercise.rest_time}
+                onRestTimeChange={handleRestTimeChange}
             />
 
             <View
