@@ -33,9 +33,9 @@ export default function TabsLayout() {
                 tabBarInactiveTintColor: "#e6e6e6",
                 tabBarShowLabel: false,
                 tabBarStyle: {
-                    backgroundColor: "#131313",
+                    backgroundColor: "#292929",
                     borderTopWidth: 1,
-                    borderTopColor: "#232323",
+                    borderTopColor: "#3c3c3c",
                     height: 84,
                 }
             }}>
