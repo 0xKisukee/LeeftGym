@@ -30,10 +30,6 @@ export default function WorkoutDetails() {
         }
     };
 
-    const handleGoBack = () => {
-        router.back();
-    };
-
     if (loading) {
         return (
             <ScreenContainer className="justify-center items-center">

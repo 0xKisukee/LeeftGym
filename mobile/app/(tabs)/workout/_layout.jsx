@@ -24,11 +24,15 @@ export default function RootLayout() {
                             <Button
                                 onPress={() => {
                                     if (source === 'home') {
+                                        router.push('/workout');
                                         router.replace('/home');
                                     } else if (source === 'profile') {
+                                        router.push('/workout');
                                         router.replace('/profile');
                                     } else {
-                                        router.back();
+                                        console.error('WHERE ARE YOU FROM???');
+                                        router.push('/workout');
+                                        router.replace('/home');
                                     }
                                 }} 
                                 title="Back" 
