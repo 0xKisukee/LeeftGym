@@ -1,14 +1,15 @@
-import {ActivityIndicator, FlatList, RefreshControl, Text, View} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl, Text, TextInput, TouchableOpacity, View} from "react-native";
 import { ScreenContainer } from "../../components/ScreenContainer";
-import { Title } from "../../components/StyledText";
+import {BodyText, Title} from "../../components/StyledText";
 import React, {useState, useEffect, useContext} from "react";
 import {WorkoutBox} from "../../components/boxes/WorkoutBox";
-import {deleteWorkout, getAll} from "../../api/workouts";
+import {commentWorkout, deleteWorkout, getAll} from "../../api/workouts";
 import AppBtn from "../../components/AppBtn";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {pushWorkout} from "../../api/workouts";
 import {UserContext} from "../../contexts/UserContext";
 import {BottomSheetContext} from "../../contexts/BottomSheetContext";
+import CommentBox from "../../components/boxes/CommentBox";
 
 export default function Home() {
     const [workouts, setWorkouts] = useState([]);
@@ -75,6 +76,26 @@ export default function Home() {
         );
     };
 
+    // Handle like updates
+    const handlePublishComment = async (workoutId, content) => {
+        try {
+            const response = await commentWorkout(workoutId, content);
+            // Mettre à jour l'état workouts avec le nouveau commentaire
+            setWorkouts(prevWorkouts =>
+                prevWorkouts.map(workout =>
+                    workout.id === workoutId
+                        ? {
+                            ...workout,
+                            Comments: [...workout.Comments, response]
+                        }
+                        : workout
+                )
+            );
+        } catch (error) {
+            console.error('Error publishing comment:', error);
+        }
+    };
+
     const onRefresh = async () => {
         setRefreshing(true);
         await fetchWorkouts();
@@ -113,6 +134,48 @@ export default function Home() {
         });
     };
 
+    // Function to open the list of comments bottom sheet for the selected workout
+    const openCommentsSheet = (workout) => {
+        // Create a local state for the comment input
+        let localCommentContent = '';
+        
+        openBottomSheet({
+            title: "Workout - Commentaires",
+            snapPoints: ['80%'],
+            content: (
+                <View>
+                    <FlatList
+                        data={workout.Comments}
+                        renderItem={({ item }) => (
+                            <CommentBox
+                                comment={item}
+                            />
+                        )}
+                    />
+
+                    <View className="flex-row items-center justify-between p-2 border-t border-gray-400">
+                        <TextInput
+                            onChangeText={(text) => {
+                                localCommentContent = text;
+                            }}
+                            className="h-12 px-2 w-80 bg-tertiary rounded-lg"
+                            placeholder="Ajoutez un commentaire"
+                            placeholderTextColor="#a8a8a8"
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                console.log("Submitting comment:", localCommentContent);
+                                handlePublishComment(workout.id, localCommentContent);
+                            }}
+                        >
+                            <BodyText className="font-bold">Publier</BodyText>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        });
+    };
+
     if (loading && !refreshing) {
         return (
             <ScreenContainer className="justify-center items-center">
@@ -134,6 +197,7 @@ export default function Home() {
                             onLikeUpdate={handleLikeUpdate}
                             userInfo={userInfos}
                             onMenuPress={() => openWorkoutOptionsSheet(item)}
+                            onCommentPress={() => openCommentsSheet(item)}
                         />
                     )}
                     keyExtractor={(item) => item.id}
