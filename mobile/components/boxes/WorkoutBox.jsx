@@ -124,7 +124,7 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress, onCommentPress 
                             handleComment={handleComment}
                         />
                         <Text className="text-gray-300 ml-2 mt-3">
-                            {workout.Comments.length || 0}
+                            {workout.Comments?.length || 0}
                         </Text>
                     </View>
                 </View>
