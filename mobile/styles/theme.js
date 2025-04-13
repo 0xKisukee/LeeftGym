@@ -1,7 +1,8 @@
 export const typography = {
     header: "text-text font-bold text-2xl",
     subheader: "text-text font-bold text-xl",
-    body: "text-text"
+    body: "text-text",
+    mini: "text-gray-500 text-sm"
 }
 
 export const containers = {

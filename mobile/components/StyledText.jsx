@@ -18,3 +18,9 @@ export const BodyText = ({className, ...props}) => {
         <Text className={`${typography.body} ${className || ''}`} {...props} />
     )
 }
+
+export const MiniText = ({className, ...props}) => {
+    return (
+        <Text className={`${typography.mini} ${className || ''}`} {...props} />
+    )
+}
