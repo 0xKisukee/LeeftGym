@@ -113,6 +113,13 @@ async function show(userId, workoutId) {
     const workout = await models.Workout.findByPk(workoutId, {
         include: [
             {
+                model: models.User,
+                as: 'User',
+                attributes: {
+                    exclude: ['password'],
+                }
+            },
+            {
                 model: models.Exercise,
                 as: 'Exercises',
                 include: [
@@ -289,6 +296,20 @@ async function like(userId, workoutId) {
                 as: 'LikedByUsers',
                 attributes: ['id'],
                 through: { attributes: [] }
+            },
+            {
+                model: models.Comment,
+                as: 'Comments',
+                attributes: ['id', 'content', 'createdAt'],
+                include: [
+                    {
+                        model: models.User,
+                        as: 'User',
+                        attributes: {
+                            exclude: ['password', 'email', 'createdAt'],
+                        }
+                    }
+                ]
             }
         ]
     });

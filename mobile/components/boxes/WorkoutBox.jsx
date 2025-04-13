@@ -4,13 +4,12 @@ import { router } from 'expo-router';
 import { likeWorkout } from '../../api/workouts';
 import {LikeBtn} from '../icons/LikeBtn';
 import {BodyText, SubTitle, Title} from "../StyledText";
-import ExerciseBox from "./ExerciseBox";
 import {ExoContext} from "../../contexts/ExoContext";
 import {UserContext} from "../../contexts/UserContext";
 import {ReleeftBtn} from "../icons/ReleeftBtn";
 import {CommentBtn} from "../icons/CommentBtn";
 
-export function WorkoutBox({ workout, onLikeUpdate, onMenuPress, onCommentPress }) {
+export function WorkoutBox({ workout, onLikeUpdate, onMenuPress, onCommentPress, source }) {
     const {userInfos} = useContext(UserContext);
 
     const [isLiking, setIsLiking] = useState(false);
@@ -69,6 +68,13 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress, onCommentPress 
         }
     }
 
+    const handleWorkoutPress = () => {
+        router.push({
+            pathname: `/workout/${workout.id}`,
+            params: { source }
+        });
+    };
+
     return (
             <View className="bg-bgsec rounded-lg mb-4 overflow-hidden p-4">
                 <View className="flex-row justify-between items-center mb-2">
@@ -86,18 +92,20 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress, onCommentPress 
                     </TouchableOpacity>
                 </View>
 
-                <SubTitle className="mb-2">{workout.name || 'Untitled Workout'}</SubTitle>
-                <BodyText className="italic mb-6">{workout.description || 'No description available'}</BodyText>
+                <TouchableOpacity onPress={handleWorkoutPress}>
+                    <SubTitle className="mb-2">{workout.name || 'Untitled Workout'}</SubTitle>
+                    <BodyText className="italic mb-6">{workout.description || 'No description available'}</BodyText>
 
-                <FlatList
-                    className="mb-6"
-                    data={sortedExercises}
-                    renderItem={({item}) => (
-                        <BodyText className="font-bold">
-                            - {getExoNameById(item.exo_id)}
-                        </BodyText>
-                    )}
-                />
+                    <FlatList
+                        className="mb-6"
+                        data={sortedExercises}
+                        renderItem={({item}) => (
+                            <BodyText className="font-bold">
+                                - {getExoNameById(item.exo_id)}
+                            </BodyText>
+                        )}
+                    />
+                </TouchableOpacity>
 
                 <View className="flex-row items-center justify-between mx-4">
                     <View className="flex-row">

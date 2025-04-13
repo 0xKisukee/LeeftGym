@@ -1,4 +1,5 @@
-import {Stack} from "expo-router";
+import {router, Stack, useLocalSearchParams} from "expo-router";
+import { Button } from "react-native";
 
 export default function RootLayout() {
     return (
@@ -7,6 +8,35 @@ export default function RootLayout() {
             <Stack.Screen name="create" options={{headerShown: false}}/>
             <Stack.Screen name="confirm" options={{headerShown: false}}/>
             <Stack.Screen name="congrats" options={{headerShown: false}}/>
+            <Stack.Screen 
+                name="[id]"
+                options={{
+                    title: "Workout Details",
+                    headerStyle: {
+                        backgroundColor: '#232323',
+                    },
+                    headerTintColor: '#ededed',
+                    headerLeft: () => {
+                        const params = useLocalSearchParams();
+                        const source = params.source || 'workout'
+                        
+                        return (
+                            <Button
+                                onPress={() => {
+                                    if (source === 'home') {
+                                        router.replace('/home');
+                                    } else if (source === 'profile') {
+                                        router.replace('/profile');
+                                    } else {
+                                        router.back();
+                                    }
+                                }} 
+                                title="Back" 
+                            />
+                        );
+                    }
+                }}
+            />
         </Stack>
     )
 }

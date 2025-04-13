@@ -21,7 +21,7 @@ export default function Profile() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const {userInfos} = useContext(UserContext);
+    const {userInfos, refreshUser} = useContext(UserContext);
     const { openBottomSheet, closeBottomSheet } = useContext(BottomSheetContext);
 
     const isFocused = useIsFocused();
@@ -42,11 +42,17 @@ export default function Profile() {
             setLoading(true);
             setError(null);
             const data = await getWorkouts();
-            const filteredWorkouts = data.filter(workout => workout.is_routine === false);
-            setWorkouts(filteredWorkouts); // exclude routines
+            // Check if data is defined before filtering
+            if (data && Array.isArray(data)) {
+                const filteredWorkouts = data.filter(workout => workout.is_routine === false);
+                setWorkouts(filteredWorkouts); // exclude routines
+            } else {
+                setWorkouts([]); // Set empty array if data is undefined or not an array
+            }
         } catch (error) {
             console.error('Error fetching workouts:', error);
             setError('Failed to load workouts. Please try again.');
+            setWorkouts([]); // Set empty array on error
         } finally {
             setLoading(false);
         }
@@ -215,6 +221,7 @@ export default function Profile() {
                             userInfo={userInfos}
                             onMenuPress={() => openWorkoutOptionsSheet(item)}
                             onCommentPress={() => openCommentsSheet(item)}
+                            source="profile"
                         />
                     )}
                     keyExtractor={(item) => item.id}

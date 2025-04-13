@@ -199,6 +199,7 @@ export default function Home() {
                             userInfo={userInfos}
                             onMenuPress={() => openWorkoutOptionsSheet(item)}
                             onCommentPress={() => openCommentsSheet(item)}
+                            source="home"
                         />
                     )}
                     keyExtractor={(item) => item.id}

@@ -20,6 +20,15 @@ export async function pushWorkout(workout) {
     }
 }
 
+export async function getWorkoutById(id) {
+    try {
+        return await get(`/workouts/${id}`);
+    } catch (error) {
+        console.error("Error fetching workout:", error);
+        throw error;
+    }
+}
+
 export async function getWorkouts() {
     try {
         const response = await get("/workouts");
@@ -32,17 +41,21 @@ export async function getWorkouts() {
 
 export async function getRoutines() {
     try {
-        return await get("/workouts/routines");
+        const response = await get("/workouts/routines");
+        return response || [];
     } catch (error) {
-        alert(error);
+        console.error("Error fetching routines:", error);
+        return [];
     }
 }
 
 export async function getAll() {
     try {
-        return await get("/workouts/getAll");
+        const response = await get("/workouts/getAll");
+        return response || [];
     } catch (error) {
-        alert(error);
+        console.error("Error fetching all workouts:", error);
+        return [];
     }
 }
 
