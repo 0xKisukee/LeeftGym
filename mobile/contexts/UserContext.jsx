@@ -8,15 +8,19 @@ export function UserProvider({ children }) {
     const [isAuth, setIsAuth] = useState(false);
     const [userInfos, setUserInfos] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [token, setToken] = useState(null);
 
     const refreshUser = async () => {
         console.log("Fetching user");
         setIsLoading(true);
 
-        const token = await getValueFor("userJWT");
+        const currentToken = await getValueFor("userJWT");
         console.log("starting fetching user in user context");
+        
+        // Update token state to trigger useEffect
+        setToken(currentToken);
 
-        if (!token) {
+        if (!currentToken) {
             console.log("no token - no auth");
             setIsAuth(false);
             setIsLoading(false);
@@ -39,9 +43,17 @@ export function UserProvider({ children }) {
         setIsLoading(false);
     };
 
+    // This effect will run when the component mounts and when isAuth changes
     useEffect(() => {
         refreshUser();
     }, [isAuth]);
+    
+    // This effect will run when the token changes (which happens when a new user logs in)
+    useEffect(() => {
+        if (token) {
+            refreshUser();
+        }
+    }, [token]);
 
     return (
         <UserContext.Provider value={{ userInfos, setUserInfos, isAuth, setIsAuth, isLoading, refreshUser }}>

@@ -12,7 +12,7 @@ import {Title, BodyText} from "../../components/StyledText";
 import { UserContext } from "../../contexts/UserContext";
 
 export default function Login() {
-    const { setIsAuth } = useContext(UserContext);
+    const { setIsAuth, refreshUser } = useContext(UserContext);
     
     const [form, setForm] = useState({
         email: "",
@@ -33,10 +33,13 @@ export default function Login() {
 
             await save("userJWT", result.token);
 
+            // Set auth to true and refresh user info
+            setIsAuth(true);
+            await refreshUser();
+
             //redirect to index=>profile
             //but for now directly redirect to profile
             router.replace("/profile");
-            setIsAuth(true);
         }
     }
 
