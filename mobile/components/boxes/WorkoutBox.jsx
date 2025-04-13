@@ -10,7 +10,7 @@ import {UserContext} from "../../contexts/UserContext";
 import {ReleeftBtn} from "../icons/ReleeftBtn";
 import {CommentBtn} from "../icons/CommentBtn";
 
-export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
+export function WorkoutBox({ workout, onLikeUpdate, onMenuPress, onCommentPress }) {
     const {userInfos} = useContext(UserContext);
 
     const [isLiking, setIsLiking] = useState(false);
@@ -64,7 +64,9 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
     }
 
     const handleComment = () => {
-        console.info("Comment");
+        if (onCommentPress) {
+            onCommentPress(workout);
+        }
     }
 
     return (
@@ -122,7 +124,7 @@ export function WorkoutBox({ workout, onLikeUpdate, onMenuPress }) {
                             handleComment={handleComment}
                         />
                         <Text className="text-gray-300 ml-2 mt-3">
-                            {workout.comments || 0}
+                            {workout.Comments.length || 0}
                         </Text>
                     </View>
                 </View>
