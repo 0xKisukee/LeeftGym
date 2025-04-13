@@ -55,6 +55,19 @@ export async function likeWorkout(workoutId) {
     }
 }
 
+export async function commentWorkout(workoutId, content) {
+    try {
+        console.log({"content": content});
+        return await post(
+            `/workouts/${workoutId}/comments`,
+            {"content": content},
+        );
+    } catch (error) {
+        console.error("Error liking workout:", error);
+        throw error;
+    }
+}
+
 export async function deleteWorkout(id) {
     try {
         return await del(`/workouts/${id}`);
