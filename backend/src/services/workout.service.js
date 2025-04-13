@@ -36,6 +36,20 @@ async function getAll() {
                 as: 'LikedByUsers',
                 attributes: ['id'],
                 through: { attributes: [] }
+            },
+            {
+                model: models.Comment,
+                as: 'Comments',
+                attributes: ['id', 'content'],
+                include: [
+                    {
+                        model: models.User,
+                        as: 'User',
+                        attributes: {
+                            exclude: ['password', 'email', 'createdAt'],
+                        }
+                    }
+                ]
             }
         ],
         order: [['createdAt', 'DESC']],
@@ -75,6 +89,20 @@ async function index(userId) {
                 as: 'LikedByUsers',
                 attributes: ['id', 'email'],
                 through: { attributes: [] }
+            },
+            {
+                model: models.Comment,
+                as: 'Comments',
+                attributes: ['id', 'content'],
+                include: [
+                    {
+                        model: models.User,
+                        as: 'User',
+                        attributes: {
+                            exclude: ['password', 'email', 'createdAt'],
+                        }
+                    }
+                ]
             }
         ],
         order: [['createdAt', 'DESC']]
@@ -104,6 +132,20 @@ async function show(userId, workoutId) {
                 as: 'LikedByUsers',
                 attributes: ['id'],
                 through: { attributes: [] }
+            },
+            {
+                model: models.Comment,
+                as: 'Comments',
+                attributes: ['id', 'content'],
+                include: [
+                    {
+                        model: models.User,
+                        as: 'User',
+                        attributes: {
+                            exclude: ['password', 'email', 'createdAt'],
+                        }
+                    }
+                ]
             }
         ]
     });
