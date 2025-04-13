@@ -21,7 +21,7 @@ export default function Profile() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const {userInfos, refreshUser} = useContext(UserContext);
+    const {userInfos, refreshUser, setIsAuth} = useContext(UserContext);
     const { openBottomSheet, closeBottomSheet } = useContext(BottomSheetContext);
 
     const isFocused = useIsFocused();
@@ -34,6 +34,7 @@ export default function Profile() {
 
     const signout = () => {
         forget("userJWT");
+        setIsAuth(false);
         router.replace("/");
     }
 

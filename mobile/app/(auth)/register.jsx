@@ -4,12 +4,15 @@ import {router} from "expo-router";
 import BetaBar from "../../components/BetaBar";
 import AppBtn from "../../components/AppBtn";
 import FormField from "../../components/FormField";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import register from "../../api/register"
 import {save, getValueFor} from "../../api/jwt";
 import {BodyText, Title} from "../../components/StyledText";
+import {UserContext} from "../../contexts/UserContext";
 
 export default function Register() {
+    const { setIsAuth, refreshUser } = useContext(UserContext);
+
     const [form, setForm] = useState({
         email: "",
         username: "",
@@ -20,6 +23,7 @@ export default function Register() {
 
     const submitRegister = async () => {
         const result = await register(form.email, form.username, form.password);
+
         if (!result.token) {
             setMessage(result.message);
             setMessageColor("red");
@@ -28,6 +32,10 @@ export default function Register() {
             setMessageColor("green");
 
             await save("userJWT", result.token);
+
+            // Set auth to true and refresh user info
+            setIsAuth(true);
+            await refreshUser();
 
             //redirect to index=>profile
             //but for now directly redirect to profile

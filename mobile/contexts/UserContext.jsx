@@ -47,13 +47,6 @@ export function UserProvider({ children }) {
     useEffect(() => {
         refreshUser();
     }, [isAuth]);
-    
-    // This effect will run when the token changes (which happens when a new user logs in)
-    useEffect(() => {
-        if (token) {
-            refreshUser();
-        }
-    }, [token]);
 
     return (
         <UserContext.Provider value={{ userInfos, setUserInfos, isAuth, setIsAuth, isLoading, refreshUser }}>
