@@ -40,7 +40,7 @@ async function getAll() {
             {
                 model: models.Comment,
                 as: 'Comments',
-                attributes: ['id', 'content'],
+                attributes: ['id', 'content', 'createdAt'],
                 include: [
                     {
                         model: models.User,
@@ -93,7 +93,7 @@ async function index(userId) {
             {
                 model: models.Comment,
                 as: 'Comments',
-                attributes: ['id', 'content'],
+                attributes: ['id', 'content', 'createdAt'],
                 include: [
                     {
                         model: models.User,
@@ -136,7 +136,7 @@ async function show(userId, workoutId) {
             {
                 model: models.Comment,
                 as: 'Comments',
-                attributes: ['id', 'content'],
+                attributes: ['id', 'content', 'createdAt'],
                 include: [
                     {
                         model: models.User,
