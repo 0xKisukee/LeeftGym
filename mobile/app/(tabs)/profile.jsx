@@ -174,6 +174,7 @@ export default function Profile() {
                         <TouchableOpacity
                             onPress={() => {
                                 console.log("Submitting comment:", localCommentContent);
+                                closeBottomSheet();
                                 handlePublishComment(workout.id, localCommentContent);
                             }}
                         >

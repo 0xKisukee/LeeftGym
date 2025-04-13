@@ -2,7 +2,7 @@
   "expo": {
     "name": "leeft",
     "slug": "leeft",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "leeft",
@@ -47,7 +47,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "e0cbd33f-614e-4da0-b995-2eb251ef4461"
+        "projectId": "177844bd-3a8d-41ea-8c5f-5c779ba52365"
       }
     }
   }
